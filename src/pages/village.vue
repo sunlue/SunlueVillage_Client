@@ -10,14 +10,16 @@
         <span class="hot" @click="setHotOrGoodSort('hot'),sortByKey(hot,'look')" :class="{'active':hotOrGood == 'hot'}">热门</span>
         <span class="good" @click="setHotOrGoodSort('good'),sortByKey(hot,'like')"
               :class="{'active':hotOrGood == 'good'}">好评</span>
-        <span class="separator"></span>
+        <span v-if="!mobile" class="separator"></span>
+        <br v-if="mobile">
         <span class="name">乡镇</span>
         <div class="city-select-box">
           <select class="citySelect custom-select" name="" id="">
             <option :value="list.id" v-for="list in cityData">{{list.name}}</option>
           </select>
         </div>
-        <span class="separator"></span>
+        <span v-if="!mobile" class="separator"></span>
+        <br v-if="mobile">
         <span class="name">特色</span>
         <span class="village-classify-list" :class="{'active':list.checked}" v-for="(list,index) in classify"
               @click="setClassify(index)">{{list.name}}</span>
@@ -26,7 +28,7 @@
     <div class="common-hot-box">
       <div class="container">
         <div class="row">
-          <div class="hot-list col-lg-3" v-for="(item,index) in hot">
+          <div class="hot-list col-lg-3 col-sm-6" v-for="(item,index) in hot">
             <div class="box">
               <div class="img-box">
                 <router-link class="search-btn"
@@ -64,7 +66,7 @@
       <div class="container">
         <p class="hot-recommend-title">热门推荐</p>
         <div class="row">
-          <div class="col-lg-3 list-item" v-for="item in hotRecommend">
+          <div class="col-lg-3 col-sm-6 list-item" v-for="item in hotRecommend">
             <div class="box">
               <a href="">
                 <div class="img-box">
@@ -96,6 +98,7 @@
         data() {
             return {
                 show: 2,
+                mobile:false,
                 cityData: [],
                 classify: [
                     {name: '土货', checked: false},
@@ -111,6 +114,10 @@
             }
         },
         mounted: function () {
+            this.mobile = window.innerWidth<992;
+            window.onresize = res=>{
+                this.mobile = window.innerWidth<992;
+            };
             this.getCityData();
             this.getHotVillage();
             this.getHotRecommend();

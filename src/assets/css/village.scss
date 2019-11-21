@@ -91,6 +91,12 @@ $mainColor: #37cf9f;
       line-height: 1em;
       cursor: pointer;
 
+      &:focus {
+        outline: none;
+        border: none;
+        box-shadow: none;
+      }
+
       option {
         font-size: 18px;
         line-height: 1em;
@@ -175,14 +181,125 @@ $mainColor: #37cf9f;
         transition: .3s;
       }
 
-      &:hover{
-        .img-box{
-          img{
+      &:hover {
+        .img-box {
+          img {
             transform: scale(1.1);
           }
         }
-        .name{
+
+        .name {
           color: $mainColor;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .village-box {
+    padding: 0;
+
+    .village-banner {
+      margin-bottom: 15px;
+    }
+
+    .village-classify {
+      padding: 10px 15px;
+      margin-bottom: 10px;
+
+      span {
+        margin-bottom: 20px !important;
+        display: inline-block;
+      }
+
+      .name {
+        font-size: 18px;
+      }
+
+      .hot, .good {
+        font-size: 14px;
+        margin-right: 36px;
+
+        &.active {
+          font-size: 18px;
+        }
+
+        &::after {
+          display: none;
+        }
+      }
+
+      .citySelect {
+        font-size: 14px;
+      }
+
+      .city-select-box {
+        height: 21px;
+
+        select {
+          height: 21px;
+        }
+      }
+
+      .village-classify-list {
+        padding: 2px 4px;
+        font-size: 14px;
+        line-height: 22px;
+
+        &.active {
+          &::after {
+            right: 1px;
+            top: 1px;
+            transform: scale(0.6);
+          }
+        }
+      }
+    }
+  }
+
+  .common-hot-box {
+    .hot-list {
+      height: auto;
+
+      .img-box {
+        height: 180px;
+      }
+
+      .text-box {
+        .name {
+          font-size: 18px;
+        }
+
+        .address {
+          font-size: 14px;
+        }
+
+        .type {
+          font-size: 12px;
+        }
+
+        ::after {
+          transform: scale(0.8);
+        }
+      }
+    }
+  }
+
+  .hot-recommend-box {
+    padding-bottom: 40px;
+    .container {
+      .hot-recommend-title {
+        margin: 20px 0;
+        line-height: 48px;
+        font-size: 24px;
+      }
+
+      .box {
+        margin-bottom: 15px;
+
+        .img-box {
+          height: 140px;
         }
       }
     }

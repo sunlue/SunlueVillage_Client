@@ -36,6 +36,12 @@
   width: 200px;
   background: #f1f1f1 url(../../../static/images/selectBtn.png) 170px center no-repeat;
   border: none;
+
+  &:focus{
+    border: none;
+    box-shadow: none;
+    outline: none;
+  }
 }
 
 .custom-textarea {
@@ -120,5 +126,39 @@
       left: 0;
       top: calc(50% - 2.5px);
     }
+  }
+}
+@media screen and (max-width: 992px) {
+  .content-box{
+    padding: 10px;
+  }
+  .custom-textarea{
+    max-width: 100%;
+  }
+  .list-name{
+    text-align: left;
+  }
+  .code-input{
+    width: 100%;
+  }
+  .phone-input{
+    width: 100%;
+  }
+  .code-img{
+    margin:10px 0;
+  }
+  .consultSelect{
+    width: 100%;
+  }
+  .left-list{
+    margin-bottom: 15px;
+  }
+  .submit-btn{
+    margin: 10px auto 20px;
+    font-size: 14px;
+    width: 100px;
+  }
+  .consult-box{
+    padding: 86px 10px 10px;
   }
 }

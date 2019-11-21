@@ -9,17 +9,20 @@ $mainColor: #37cf9f;
 
   .list-box {
     margin-bottom: 40px;
-    &:hover{
-      .img-box{
-        img{
+
+    &:hover {
+      .img-box {
+        img {
           transform: scale(1.1);
         }
       }
-      .date-day,.date-year,.name-box{
+
+      .date-day, .date-year, .name-box {
         color: $mainColor;
       }
-      .date-box{
-        &::after{
+
+      .date-box {
+        &::after {
           background-color: $mainColor;
         }
       }
@@ -57,7 +60,7 @@ $mainColor: #37cf9f;
     width: 23%;
     position: relative;
 
-    &::after{
+    &::after {
       position: absolute;
       content: '';
       width: 1px;
@@ -101,5 +104,26 @@ $mainColor: #37cf9f;
     line-clamp: 2;
     -webkit-box-orient: vertical;
     transition: .3s;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .content-box{
+    padding: 20px 0 ;
+
+    .img-box{
+      height: 160px;
+    }
+    .text-box{
+      padding: 10px;
+    }
+    .date-box {
+      .date-day{
+        font-size: 18px;
+      }
+    }
+    .name-box{
+      font-size: 14px;
+    }
   }
 }

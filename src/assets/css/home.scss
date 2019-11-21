@@ -107,7 +107,7 @@ $mainColor: #37cf9f;
     border-radius: 4px;
     background-image: url(../../../static/images/villageBtn.png);
     background-repeat: no-repeat;
-    background-position: 17px 14px;
+    background-position: 17px center;
   }
 
 }
@@ -475,6 +475,167 @@ $mainColor: #37cf9f;
         }
       }
 
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .banner-text {
+    max-width: 85%;
+  }
+  .search {
+    .search-box {
+      max-width: 75%;
+
+      .search-input {
+        height: 40px;
+        line-height: 40px;
+      }
+    }
+
+    .village-address {
+      margin: 5vh 0;
+      height: 40px;
+      line-height: 40px;
+      font-size: 14px;
+    }
+  }
+
+  .hot-list-box {
+    display: none;
+  }
+  .classify-box {
+    top: inherit;
+    bottom: 16vh;
+
+    .classify-list {
+      max-width: 15%;
+      margin: 0 0.5%;
+      height: auto;
+      padding: 8px 0;
+
+      .list-icon {
+        transform: scale(0.6);
+      }
+
+      .list-text {
+        margin-top: 5px;
+        font-size: 14px;
+      }
+    }
+  }
+
+  .home-hot {
+    padding: 30px 0;
+
+    .hot-village-title {
+      max-width: 90%;
+      margin: 30px auto;
+
+      img {
+        max-width: 100%;
+      }
+    }
+  }
+  .common-hot-box {
+    .hot-list {
+      height: auto;
+
+      &:first-child {
+        height: 240px;
+      }
+
+      .text-box {
+        .name {
+          font-size: 20px;
+        }
+
+        .address {
+          font-size: 14px;
+        }
+
+        .type {
+          font-size: 12px;
+        }
+
+        ::after {
+          transform: scale(0.8);
+        }
+      }
+
+      .img-box {
+        height: 180px;
+      }
+    }
+  }
+
+  .home-news {
+    padding: 0 0 30px;
+
+    .news-title {
+      max-width: 90%;
+      margin: 30px auto;
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    #newsSwiper {
+      .swiper-pagination {
+        bottom: 10px;
+        right: 5px;
+      }
+
+      .bottom-name {
+        height: 45px;
+        line-height: 45px;
+        font-size: 16px;
+        padding: 0 100px 0 12px;
+      }
+
+      .swiper-list {
+        .img-box {
+          height: 200px;
+        }
+      }
+    }
+
+    .top-news {
+      padding: 30px 0 15px;
+
+      .name {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .intro {
+        font-size: 12px;
+        margin: 0;
+      }
+    }
+
+    .news-list {
+      margin-top: 5px;
+
+      .name {
+        width: 70%;
+        font-size: 16px;
+      }
+
+      .date {
+        width: 30%;
+      }
+    }
+
+    .home-infomation {
+      .home-infomation-list {
+        margin-top: 20px;
+
+        .img-box {
+          height: 180px;
+        }
+      }
     }
   }
 }

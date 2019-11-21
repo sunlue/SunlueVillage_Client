@@ -18,23 +18,7 @@
       <p class="news-title"><img src="../../static/images/informationTitle.png" alt=""></p>
 
       <div class="container">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="top-news">
-              <a href="">
-                <p class="name">{{topNews.name}}</p>
-                <p class="intro">{{topNews.intro}}</p>
-              </a>
-            </div>
-            <div class="news-box">
-              <p class="news-list" v-for="(list,index) in newsList">
-                <a href="" class="clearfix">
-                  <span class="name" :title="list.name">{{list.name}}</span>
-                  <span class="date">{{list.date}}</span>
-                </a>
-              </p>
-            </div>
-          </div>
+        <div class="row flex-row-reverse">
           <div class="col-lg-6">
             <div class="swiper-container" id="newsSwiper">
               <div class="swiper-wrapper">
@@ -53,12 +37,28 @@
               </div>
             </div>
           </div>
+          <div class="col-lg-6">
+            <div class="top-news">
+              <a href="">
+                <p class="name">{{topNews.name}}</p>
+                <p class="intro">{{topNews.intro}}</p>
+              </a>
+            </div>
+            <div class="news-box">
+              <p class="news-list" v-for="(list,index) in newsList">
+                <a href="" class="clearfix">
+                  <span class="name" :title="list.name">{{list.name}}</span>
+                  <span class="date">{{list.date}}</span>
+                </a>
+              </p>
+            </div>
+          </div>
         </div>
         <a class="newsMore" href="/news">查看更多</a>
 
         <p class="news-title action-title"><img src="../../static/images/activity.png" alt=""></p>
         <div class="row home-infomation">
-          <div class="col-lg-4 home-infomation-list" v-for="list in infomationList">
+          <div class="col-lg-4 col-sm-6 home-infomation-list" v-for="list in infomationList">
             <div class="img-box">
               <a href="">
                 <img :src="list.imgUrl" :alt="list.name" :title="list.name">

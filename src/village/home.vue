@@ -96,6 +96,9 @@
                 villageArr:[]
             }
         },
+        created(){
+            this.boxClose = window.innerWidth<992;
+        },
         mounted() {
             this.setVillageBanner();
             this.getVillageData();

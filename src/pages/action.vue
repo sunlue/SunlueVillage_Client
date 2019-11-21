@@ -7,7 +7,7 @@
     <section class="content-box">
       <div class="container">
         <div class="row">
-          <div class="col-lg-4 list-box" v-for="(item,index) in actionArr">
+          <div class="col-lg-4 col-sm-6 list-box" v-for="(item,index) in actionArr">
             <router-link :to="{ path: 'article', query: { id: item.id }}">
               <div class="box">
                 <div class="img-box">

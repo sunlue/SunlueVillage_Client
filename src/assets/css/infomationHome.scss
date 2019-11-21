@@ -82,7 +82,7 @@ $mainColor: #37cf9f;
     position: relative;
     padding-left: 40px;
 
-    &::before{
+    &::before {
       position: absolute;
       content: '';
       width: 30px;
@@ -93,7 +93,8 @@ $mainColor: #37cf9f;
       top: calc(50% - 15px);
       left: 0;
     }
-    &::after{
+
+    &::after {
       position: absolute;
       content: '';
       width: 8px;
@@ -101,7 +102,7 @@ $mainColor: #37cf9f;
       border-radius: 50%;
       background-color: $mainColor;
       top: calc(50% - 4px);
-      left: 10px;
+      left: 11px;
     }
   }
 
@@ -113,7 +114,7 @@ $mainColor: #37cf9f;
     font-size: 20px;
     position: relative;
 
-    &::before{
+    &::before {
       position: absolute;
       content: '';
       width: 30px;
@@ -125,7 +126,8 @@ $mainColor: #37cf9f;
       left: calc(50% - 15px);
 
     }
-    &::after{
+
+    &::after {
       position: absolute;
       content: '';
       width: 8px;
@@ -287,5 +289,96 @@ $mainColor: #37cf9f;
 
   .action-title {
     margin: 50px 0;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .information-pagination {
+    display: none;
+  }
+  .information-home-banner {
+    height: auto;
+    padding-top: 60px;
+
+    .information-banner {
+      .img-box {
+        height: 180px;
+      }
+    }
+  }
+  .information-news-box {
+    padding: 20px 0 30px;
+
+    .newsMore {
+      font-size: 14px;
+      margin: 30px auto;
+
+      &::after,&::before{
+        transform: scale(0.8);
+      }
+    }
+
+    .actionMore {
+      font-size: 14px;
+      margin: 30px auto;
+      &::after,&::before{
+        transform: scale(0.8);
+      }
+    }
+
+    .news-title {
+      max-width: 55%;
+      margin: 30px auto;
+
+      img {
+        max-width: 100%;
+      }
+    }
+
+    .top-news {
+      padding: 30px 0 15px;
+
+      .name {
+        font-size: 20px;
+        margin-bottom: 5px;
+      }
+
+      .intro {
+        font-size: 12px;
+      }
+    }
+
+    .news-list {
+      margin-top: 5px;
+
+      .name {
+        width: 70%;
+        font-size: 16px;
+      }
+
+      .date {
+        width: 30%;
+      }
+    }
+
+    #newsSwiper {
+      .bottom-name {
+        height: 45px;
+        line-height: 45px;
+        font-size: 16px;
+        padding: 0 100px 0 12px;
+      }
+
+      .swiper-list {
+        .img-box {
+          height: 200px;
+        }
+      }
+
+      .swiper-pagination {
+        bottom: 10px;
+        right: 5px;
+      }
+    }
   }
 }

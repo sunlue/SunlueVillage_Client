@@ -15,11 +15,11 @@
           </li>
           <li class="list-inline-item head-list" :class="{active:show === 4}"><a href="/serve">服务</a></li>
         </ul>
-        <div class="float-right login-btn">
+        <!--<div class="float-right login-btn">
           <a href="/login">
             登录 / 注册
           </a>
-        </div>
+        </div>-->
       </div>
     </div>
 
@@ -52,6 +52,23 @@
         </a>
       </div>
     </div>
+
+    <div class="mobile-nav-box" :class="{'mobile-nav-box-fixed':closeBtn}">
+      <div class="mobile-log">
+        <a href="/">
+          <img src="../../static/images/mobile_logo.png" alt="">
+        </a>
+      </div>
+      <div class="mobile-btn" :class="{'close-btn':closeBtn}" @click="closeBtn = !closeBtn"></div>
+      <ul class="mobile-nav clearfix" :class="{'mobile-nav-show':closeBtn}">
+        <li><p><a href="/">首页</a></p></li>
+        <li><p><a href="/village">村落</a></p></li>
+        <li><p><a href="/information-home">资讯</a></p></li>
+        <li><p><a href="/serve">服务</a></p></li>
+        <li><p><a href="/panorama">720°全景</a></p></li>
+        <li><p><a href="/consult">咨询</a></p></li>
+      </ul>
+    </div>
   </div>
 </template>
 
@@ -65,6 +82,11 @@
             rightBtn: {
                 type: Boolean,
                 required: true
+            }
+        },
+        data(){
+            return{
+                closeBtn:false
             }
         }
     }

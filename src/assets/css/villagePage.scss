@@ -267,4 +267,92 @@
   }
 }
 
+@media screen and (max-width: 992px) {
+  .content-box {
+    padding: 10px;
 
+    .title {
+      font-size: 20px;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .list-jump {
+      margin-bottom: 40px;
+
+      .num-btn {
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      .name {
+        font-size: 16px;
+        margin-top: 10px;
+      }
+
+      .details {
+        font-size: 14px;
+      }
+    }
+
+    .history-content {
+      font-size: 14px;
+    }
+  }
+  .right-anchor {
+    display: none;
+  }
+  .village-banner {
+    width: 100vw;
+    height: 160px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+  .swiper-container {
+    height: auto;
+
+    .name {
+      opacity: 1;
+      line-height: 30px;
+      padding-left: 20px;
+      font-size: 14px !important;
+
+      &::after {
+        display: none;
+      }
+    }
+
+    .img-box {
+      height: 190px;
+    }
+
+    .swiper-slide {
+      height: auto;
+    }
+  }
+  .swiper-button-prev {
+    left: 17px;
+    right: initial;
+  }
+  .swiper-pagination {
+    left: 0;
+    right: 0;
+  }
+  .message-list {
+    height: auto;
+
+    .news-date {
+      display: none;
+    }
+
+    .img-box{
+      margin-top: 5px;
+    }
+  }
+}

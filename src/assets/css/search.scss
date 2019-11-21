@@ -113,23 +113,66 @@
         padding-left: 24px;
         color: #fff;
 
-        &::placeholder{
+        &::placeholder {
           color: #fff;
           font-size: 16px;
           font-weight: 300;
         }
       }
 
-      .search-btn{
+      .search-btn {
         width: 24px;
         height: 24px;
         display: block;
         position: absolute;
         right: 26px;
-        top:11.5px;
+        top: 11.5px;
         background-image: url(../../../static/images/searchPageBtn.png);
         cursor: pointer;
       }
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .public-banner {
+    .search-box {
+      text-align: center;
+      width: 90%;
+
+      .input-box {
+        height: 35px;
+
+        .search-input {
+          width: 100%;
+        }
+
+        .search-btn {
+          top: calc(50% - 12px);
+          right: 10px;
+        }
+      }
+
+      .name{
+        font-size: 16px;
+      }
+    }
+  }
+
+  .news-box {
+    padding: 40px 0;
+
+    .container {
+      .name{
+        margin-top: 10px;
+        font-size: 16px;
+      }
+      .intro{
+        font-size: 12px;
+      }
+    }
+    .list-box {
+      height: auto;
     }
   }
 }

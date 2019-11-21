@@ -14,7 +14,7 @@ $mainColor: #37cf9f;
     right: 0;
     top: 50%;
     width: 608px;
-    background-color: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     padding: 42px 30px 42px 42px;
     border-radius: 15px 0 0 15px;
     transition: .5s;
@@ -138,13 +138,13 @@ $mainColor: #37cf9f;
       }
     }
 
-    .search-result,.hot-recommend {
+    .search-result, .hot-recommend {
       padding: 0 25px;
       border-radius: 10px;
       background-color: #fff;
       position: relative;
 
-      &:last-child{
+      &:last-child {
         margin-top: 1rem;
       }
 
@@ -215,7 +215,7 @@ $mainColor: #37cf9f;
   }
 
   .filter-box-close {
-    transform: translate(100%,-50%);
+    transform: translate(100%, -50%);
 
     .close-box {
       left: -14px;
@@ -238,7 +238,7 @@ $mainColor: #37cf9f;
   left: initial;
   right: 120px;
 
-  &:focus{
+  &:focus {
     outline: none;
   }
 
@@ -255,11 +255,105 @@ $mainColor: #37cf9f;
   top: 17px;
   right: 17px;
 
-  &:focus{
+  &:focus {
     outline: none;
   }
 
   &:after {
     display: none;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .map-box {
+    height: calc(100vh - 72px);
+
+    .filter-box {
+      padding: 10px 10px 10px 20px;
+      max-width: 100vw;
+
+      .towns-box {
+        width: auto;
+        padding: 0 15px;
+        margin-bottom: 10px;
+
+        .name {
+          font-size: 14px;
+          line-height: 40px;
+        }
+
+        .citySelect {
+          margin-left: 20px;
+          font-size: 14px;
+        }
+      }
+
+      .feature-box {
+        padding: 0 15px;
+        margin-bottom: 10px;
+
+        .name {
+          font-size: 14px;
+          margin-right: 10px;
+          line-height: 40px;
+        }
+
+        .village-classify-list {
+          padding: 2px 4px;
+          font-size: 14px;
+          line-height: 1.3em;
+
+          &.active {
+            &::after {
+              right: 1px;
+              top: 1px;
+              transform: scale(0.6);
+            }
+          }
+        }
+      }
+
+      .search-box {
+        padding: 0 15px;
+        margin-bottom: 10px;
+
+        .name {
+          font-size: 14px;
+          line-height: 40px;
+        }
+
+        .search-input {
+          width: auto;
+        }
+
+        .search-btn {
+          transform: scale(0.7);
+        }
+      }
+
+      .search-result, .hot-recommend {
+        padding: 0 15px;
+        margin-bottom: 10px;
+
+        p {
+          margin-bottom: 0;
+        }
+
+        .name {
+          font-size: 14px;
+          line-height: 40px;
+        }
+
+        .swiper-container {
+          .img-box {
+            height: 67px;
+          }
+
+          .list-name {
+            font-size: 12px;
+          }
+        }
+      }
+    }
   }
 }

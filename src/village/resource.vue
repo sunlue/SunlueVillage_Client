@@ -65,6 +65,11 @@
         mounted() {
             this.getVillageData();
             window.addEventListener('scroll', this.setAnchor);
+
+            this.mobile = window.innerWidth<992;
+            window.onresize = ()=>{
+                this.mobile = window.innerWidth<992;
+            };
         },
         destroyed() { //页面离开后销毁，防止切换路由后上一个页面监听scroll滚动事件会在新页面报错问题
             window.removeEventListener('scroll', this.setAnchor)
@@ -72,6 +77,7 @@
         data() {
             return {
                 show: 3,
+                mobile:false,
                 villageId: this.$route.query.vid,
                 villageArr: [],
                 showItem: 0
@@ -122,13 +128,15 @@
             initSwiper() {
                 new Swiper('.specialty-swiper', {
                     observer: true,
-                    slidesPerView: 3,
-                    slidesPerColumn: 2,
+                    slidesPerView: this.mobile?1:3,
+                    slidesPerColumn: this.mobile?1:2,
                     spaceBetween: 30,
                     // 如果需要分页器
                     pagination: {
                         el: '.specialty-pagination',
+                        clickable:true
                     },
+
 
                     // 如果需要前进后退按钮
                     navigation: {
@@ -149,6 +157,10 @@
 
   .specialty-swiper .swiper-pagination-bullet-active {
     background-color: #37cf9f;
+  }
+
+  .swiper-container .swiper-pagination-bullet:focus{
+    outline: none;
   }
 
 </style>

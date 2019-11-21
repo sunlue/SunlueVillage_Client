@@ -48,7 +48,7 @@
       <div class="container">
         <div class="row">
           <div class="hot-list" v-for="(item,index) in hot" v-if="index <= 8"
-               :class="{'col-lg-6':index === 0 ,'col-lg-3':index > 0 }">
+               :class="{'col-lg-6':index === 0 ,'col-lg-3 col-sm-6':index > 0 }">
             <div class="box">
               <div class="img-box">
                 <router-link class="search-btn"
@@ -86,23 +86,7 @@
       <p class="news-title"><img src="../../static/images/homeNewsTitle.png" alt=""></p>
 
       <div class="container">
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="top-news">
-              <a href="">
-                <p class="name">{{topNews.name}}</p>
-                <p class="intro">{{topNews.intro}}</p>
-              </a>
-            </div>
-            <div class="news-box">
-              <p class="news-list" v-for="(list,index) in newsList">
-                <a href="" class="clearfix">
-                  <span class="name" :title="list.name">{{list.name}}</span>
-                  <span class="date">{{list.date}}</span>
-                </a>
-              </p>
-            </div>
-          </div>
+        <div class="row flex-row-reverse">
           <div class="col-lg-6">
             <div class="swiper-container" id="newsSwiper">
               <div class="swiper-wrapper">
@@ -119,6 +103,22 @@
               <div class="bottom-name">
                 {{activeNews}}
               </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="top-news">
+              <a href="">
+                <p class="name">{{topNews.name}}</p>
+                <p class="intro">{{topNews.intro}}</p>
+              </a>
+            </div>
+            <div class="news-box">
+              <p class="news-list" v-for="(list,index) in newsList">
+                <a href="" class="clearfix">
+                  <span class="name" :title="list.name">{{list.name}}</span>
+                  <span class="date">{{list.date}}</span>
+                </a>
+              </p>
             </div>
           </div>
         </div>
