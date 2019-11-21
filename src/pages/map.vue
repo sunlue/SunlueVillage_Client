@@ -151,6 +151,9 @@
                 }
             })
         },
+        created(){
+            this.showFilter = !(window.innerWidth<992);
+        },
         data() {
             return {
                 show: 2,
