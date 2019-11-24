@@ -122,10 +122,14 @@ $mainColor: #37cf9f;
   z-index: 2;
 
   .hot-name {
+    margin: 10px 15px;
+    display: inline-block;
+    line-height: 25px;
     color: #fff;
-    font-size: 18px;
+    padding: 0 10px;
+    background-color: rgba(0,0,0,0.16);
+    border-radius: 2px;
     position: relative;
-    margin: 0 20px;
 
     &::after {
       content: '';
@@ -169,7 +173,7 @@ $mainColor: #37cf9f;
 
     &:hover {
       transform: translateY(-5px);
-      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
     }
 
     a {

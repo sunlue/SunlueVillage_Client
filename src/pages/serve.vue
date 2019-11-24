@@ -10,14 +10,13 @@
           <div class="col-lg-4 list-box">
             <div class="swiper-container serve-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in serve.recommend">
-                  <router-link class=""
-                               :to="{ path: 'article', query: { id: item.id }}">
+                <div class="swiper-slide" v-for="item in recommendList">
+                  <a :href="'/article?id='+item.uniqid">
                     <div class="img-box">
-                      <img :src="item.img" alt="">
+                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                     </div>
-                    <p class="list-name" :title="item.name">{{item.name}}</p>
-                  </router-link>
+                    <p class="list-name" :title="item.title">{{item.title}}</p>
+                  </a>
                 </div>
               </div>
               <div class="swiper-pagination serve-pagination"></div>
@@ -28,13 +27,13 @@
               <div class="hot-name">
                 热门消息
               </div>
-              <router-link :key="index" :to="{ path: 'article', query: { id: item.id }}"
-                           v-for="(item,index) in serve.hot">
+              <a :href="'/article?id='+item.uniqid" v-for="item in hotList">
                 <p class="hot-list clearfix">
-                  <span class="name">{{item.name}}</span>
-                  <span class="date">{{item.date | formatDateMD}}</span>
+                  <span class="name">{{item.title}}</span>
+                  <span class="date">{{item.create_time | formatDateMD}}</span>
                 </p>
-              </router-link>
+              </a>
+
             </div>
           </div>
           <div class="col-lg-3 list-box clearfix">
@@ -118,7 +117,7 @@
     <section class="serve-btn-box row">
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="http://www.scncpzs.com/" target="_blank">
             <span class="list-icon"></span>
             <span class="list-name">产品质量安全追溯</span>
           </a>
@@ -126,7 +125,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="http://202.61.89.190:8080/" target="_blank">
             <span class="list-icon"></span>
             <span class="list-name">农产品质量安全监测</span>
           </a>
@@ -134,7 +133,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="javascript:void(0)">
             <span class="list-icon"></span>
             <span class="list-name">农情快报</span>
           </a>
@@ -142,7 +141,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="javascript:void(0)">
             <span class="list-icon"></span>
             <span class="list-name">农技问答</span>
           </a>
@@ -150,7 +149,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="javascript:void(0)">
             <span class="list-icon"></span>
             <span class="list-name">农药数字监督</span>
           </a>
@@ -158,7 +157,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="http://xue.yszn.net.cn/" target="_blank">
             <span class="list-icon"></span>
             <span class="list-name">双创培训</span>
           </a>
@@ -166,7 +165,7 @@
       </div>
       <div class="list-box col">
         <div class="box clearfix">
-          <a href="">
+          <a href="http://www.moa.gov.cn/sj/index.htm" target="_blank">
             <span class="list-icon"></span>
             <span class="list-name">农事日历</span>
           </a>
@@ -175,25 +174,25 @@
     </section>
 
     <section class="news-box">
-      <div class="list-box" v-for="(item,index) in serve.newest">
+      <div class="list-box" v-for="(item,index) in serve">
         <div class="container">
           <a href="">
             <div class="row">
               <div class="col-lg-1 news-date">
-                <p class="news-day">{{item.date | formatDateD}}</p>
-                <p class="news-year">{{item.date | formatDateYM}}</p>
+                <p class="news-day">{{item.create_time | formatDateD}}</p>
+                <p class="news-year">{{item.create_time | formatDateYM}}</p>
               </div>
-              <div :class="{'col-lg-9':item.img,'col-lg-11':!item.img}">
+              <div :class="{'col-lg-9':item.thumbnail,'col-lg-11':!item.thumbnail}">
                 <p class="name">
-                  {{item.name}}
+                  {{item.title}}
                 </p>
                 <p class="intro">
-                  {{item.intro}}
+                  {{item.excerpt}}
                 </p>
               </div>
-              <div class="col-lg-2" v-if="item.img">
+              <div class="col-lg-2" v-if="item.thumbnail">
                 <div class="img-box">
-                  <img :src="item.img" alt="">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="">
                 </div>
               </div>
             </div>
@@ -220,20 +219,74 @@
         data() {
             return {
                 show: 5,
-                serve: []
+                listType:"ARTICLE-TYPE-5DDA3FF9C6531",
+                serve: [],
+                dataList: [],
+                hotList: [],
+                recommendList: []
             }
         },
         mounted() {
             this.getServe();
+            this.getRecommend();
+            this.getHot();
         },
         methods: {
             // 获取服务信息
             getServe() {
-                axios.get("../../static/data/serve.json", {}).then(res => {
-                    this.serve = res.data
-                    this.$nextTick(() => {
-                        this.initSwiper()
-                    })
+                // axios.get("../../static/data/serve.json", {}).then(res => {
+                //     this.serve = res.data
+                //     this.$nextTick(() => {
+                //         this.initSwiper()
+                //     })
+                // })
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.listType,
+                        page: 1,
+                        limit: 8
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.serve = res.data.data.data;
+                        // console.log(this.serve)
+                    }
+                })
+            },
+            //获取推荐
+            getRecommend() {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.listType,
+                        page: 1,
+                        limit: 3,
+                        recommended: 1
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.recommendList = res.data.data.data;
+                        this.$nextTick(() => {
+                            this.initSwiper()
+                        })
+                    }
+                })
+            },
+            // 获取热门
+            getHot() {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.listType,
+                        page: 1,
+                        limit: 6,
+                        hot: 1
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.hotList = res.data.data.data;
+                    }
                 })
             },
             // 初始化swiper

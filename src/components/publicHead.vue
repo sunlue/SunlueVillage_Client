@@ -32,10 +32,10 @@
       </div>
 
       <div class="broadside-list">
-        <a href="">
+        <div @click="$bvModal.show('QRCode-modal')">
           <i class="list-icon"></i>
           <p class="list-text">微信</p>
-        </a>
+        </div>
       </div>
 
       <div class="broadside-list">
@@ -69,6 +69,10 @@
         <li><p><a href="/consult">咨询</a></p></li>
       </ul>
     </div>
+
+    <b-modal id="QRCode-modal" title="微信公众号" centered size="sm" hide-footer>
+      <img class="img-fluid img-thumbnail" src="../../static/images/QRCode.png" alt="">
+    </b-modal>
   </div>
 </template>
 
@@ -84,9 +88,9 @@
                 required: true
             }
         },
-        data(){
-            return{
-                closeBtn:false
+        data() {
+            return {
+                closeBtn: false
             }
         }
     }

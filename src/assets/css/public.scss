@@ -467,10 +467,22 @@ footer {
   .page-item {
     margin: 0 2px;
 
+    &.active{
+      .page-link {
+        color: #fff;
+        background: #37cf9f;
+        border-color: #37cf9f;
+      }
+    }
+
     .page-link {
       border-radius: 4px;
       color: #ccc;
       font-size: 20px;
+
+      &:focus{
+        box-shadow: none;
+      }
 
       &.router-link-exact-active {
         color: #fff;

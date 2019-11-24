@@ -40,6 +40,12 @@
         color: #999;
         border-bottom: 1px solid #eee;
 
+        &:hover{
+          .name,.date{
+            color: #37cf9f;
+          }
+        }
+
         .name {
           float: left;
           display: inline-block;
@@ -47,11 +53,13 @@
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+          transition: .3s;
         }
 
         .date {
           float: right;
           max-width: 30%;
+          transition: .3s;
         }
       }
 
