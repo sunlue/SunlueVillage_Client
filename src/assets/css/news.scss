@@ -72,6 +72,9 @@
       font-size: 24px;
       color: #333;
       margin: 30px 0 0;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
     }
 
     .intro {

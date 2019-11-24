@@ -8,25 +8,31 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-4 col-sm-6 list-box" v-for="(item,index) in actionArr">
-            <router-link :to="{ path: 'article', query: { id: item.id }}">
+            <a :href="'/article?id='+item.uniqid">
               <div class="box">
                 <div class="img-box">
-                  <img :src="item.imgUrl" alt="">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                 </div>
                 <div class="text-box clearfix">
                   <div class="date-box">
-                    <p class="date-day">{{item.date | formatDateD}}</p>
-                    <p class="date-year">{{item.date | formatDateYM}}</p>
+                    <p class="date-day">{{item.create_time | formatDateD}}</p>
+                    <p class="date-year">{{item.create_time | formatDateYM}}</p>
                   </div>
-                  <div class="name-box">
-                    {{item.name}}
+                  <div class="name-box" :title="item.title">
+                    {{item.title}}
                   </div>
                 </div>
               </div>
-            </router-link>
+            </a>
           </div>
         </div>
       </div>
+      <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                    v-model="currentPage"
+                    :total-rows="rows"
+                    :per-page="perPage"
+                    @input="getActionData"
+      ></b-pagination>
     </section>
     <publicFooter/>
   </div>
@@ -44,7 +50,11 @@
         data() {
             return {
                 show: 31,//当前栏目
-                actionArr: []
+                actionArr: [],
+                actionType:"ARTICLE-TYPE-5D1C482F4320B",
+                rows: '',
+                currentPage: 1,
+                perPage: 9,
             }
         },
         mounted() {
@@ -53,8 +63,24 @@
         methods: {
             //获取特色活动数据
             getActionData: function () {
-                axios.get("../../static/data/actionAll.json", {}).then(res => {
-                    this.actionArr = res.data
+                // axios.get("../../static/data/actionAll.json", {}).then(res => {
+                //     this.actionArr = res.data
+                // })
+
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                let perPage = this.perPage;
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.actionType,
+                        page: this.currentPage,
+                        limit: perPage,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.rows = resData.total;
+                        this.actionArr = resData.data;
+                    }
                 })
             }
         },

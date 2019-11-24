@@ -3,12 +3,12 @@
     <publicHead :show="show" :rightBtn="false"/>
     <section class="serve-list-box">
       <b-nav tabs align="center">
-        <b-nav-item :active="tabId==1" @click="getServeData(1)">&emsp;党宣 &emsp;</b-nav-item>
-        <b-nav-item :active="tabId==2" @click="getServeData(2)">&emsp;生产&emsp;</b-nav-item>
-        <b-nav-item :active="tabId==3" @click="getServeData(3)">&emsp;科技&emsp;</b-nav-item>
-        <b-nav-item :active="tabId==4" @click="getServeData(4)">&emsp;金融&emsp;</b-nav-item>
-        <b-nav-item :active="tabId==5" @click="getServeData(5)"> &nbsp;农民工&nbsp;</b-nav-item>
-        <b-nav-item :active="tabId==6" @click="getServeData(6)">社会组织</b-nav-item>
+        <b-nav-item :active="tabId==1" @click="changeNav(1)">&emsp;党宣&emsp;</b-nav-item>
+        <b-nav-item :active="tabId==2" @click="changeNav(2)">&emsp;生产&emsp;</b-nav-item>
+        <b-nav-item :active="tabId==3" @click="changeNav(3)">&emsp;科技&emsp;</b-nav-item>
+        <b-nav-item :active="tabId==4" @click="changeNav(4)">&emsp;金融&emsp;</b-nav-item>
+        <b-nav-item :active="tabId==5" @click="changeNav(5)">&nbsp;农民工&nbsp;</b-nav-item>
+        <b-nav-item :active="tabId==6" @click="changeNav(6)">社会组织</b-nav-item>
       </b-nav>
     </section>
     <section class="news-box serve-list-news">
@@ -18,20 +18,20 @@
             <router-link class="search-btn" :to="{ path: 'article', query: { id: item.id }}">
               <div class="row">
                 <div class="col-lg-1 news-date">
-                  <p class="news-day">{{item.date | formatDateD}}</p>
-                  <p class="news-year">{{item.date | formatDateYM}}</p>
+                  <p class="news-day">{{item.create_time | formatDateD}}</p>
+                  <p class="news-year">{{item.create_time | formatDateYM}}</p>
                 </div>
-                <div :class="{'col-lg-9':item.imgUrl,'col-lg-11':!item.imgUrl}">
-                  <p class="name">
-                    {{item.name}}
+                <div :class="{'col-lg-9':item.thumbnail,'col-lg-11':!item.thumbnail}">
+                  <p class="name" :title="item.title">
+                    {{item.title}}
                   </p>
                   <p class="intro">
-                    {{item.intro}}
+                    {{item.excerpt}}
                   </p>
                 </div>
-                <div class="col-lg-2" v-if="item.imgUrl">
+                <div class="col-lg-2" v-if="item.thumbnail">
                   <div class="img-box">
-                    <img :src="item.imgUrl" alt="">
+                    <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                   </div>
                 </div>
               </div>
@@ -40,7 +40,12 @@
         </div>
       </div>
 
-      <b-pagination-nav v-if="totalPage>1" hide-goto-end-buttons :link-gen="$myfunction.linkGen" :number-of-pages="totalPage" use-router align="center"></b-pagination-nav>
+      <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                    v-model="currentPage"
+                    :total-rows="rows"
+                    :per-page="perPage"
+                    @input="getServeData"
+      ></b-pagination>
 
     </section>
     <publicFooter/>
@@ -59,32 +64,52 @@
         data() {
             return {
                 show: 4,
-                totalPage:10,
-                tabId: this.$route.query.id ? this.$route.query.id : 1,
-                serveData: []
+                totalPage: 10,
+                tabId: this.$route.query.id ? parseInt(this.$route.query.id) : 1,
+                serveData: [],
+                serveType: "",
+                typeArr: [
+                    "ARTICLE-TYPE-5DDA7F2529C4A",
+                    "ARTICLE-TYPE-5DDA7F2BCC860",
+                    "ARTICLE-TYPE-5DDA7F3625498",
+                    "ARTICLE-TYPE-5DDA7F3ACCE5E",
+                    "ARTICLE-TYPE-5DDA7F48363E0",
+                    "ARTICLE-TYPE-5DDA7F54399A8"
+                ],
+                rows: '',
+                currentPage: 1,
+                perPage: 10
             }
         },
         mounted() {
-            this.initServeData();
+            this.serveType = this.typeArr[this.tabId - 1];
+            this.getServeData();
         },
         methods: {
-            //初始当前服务数据
-            initServeData: function () {
-                axios.get("../../static/data/newsAll.json", {
-                    id: this.tabId
-                }).then(res => {
-                    this.serveData = res.data
-                })
-            },
             // 获取指定服务类型数据
-            getServeData: function (id) {
-                this.tabId = id
-                axios.get("../../static/data/newsAll.json", {
-                    id: this.tabId
-                }).then(res => {
-                    this.serveData = res.data
+            getServeData: function () {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.serveType,
+                        page: this.currentPage,
+                        limit: this.perPage,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.rows = resData.total;
+                        this.serveData = resData.data;
+                    }
                 })
             },
+            // 切换栏目
+            changeNav(id) {
+                this.tabId = id;
+                this.currentPage = 1;
+                this.serveType = this.typeArr[id - 1];
+                this.getServeData();
+            }
         },
         filters: {
             formatDateYM: function (value) {

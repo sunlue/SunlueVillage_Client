@@ -19,13 +19,13 @@
             <p class="title">特色物产</p>
             <div class="swiper-container specialty-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in villageArr.specialty">
-                  <a href="">
+                <div class="swiper-slide" v-for="item in specialtyArr">
+                  <a :href="'/article?id='+item.uniqid">
                     <div class="img-box">
-                      <img :src="item.img" alt="">
+                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                     </div>
-                    <p class="name" :title="item.name">
-                      {{item.name}}
+                    <p class="name" :title="item.title">
+                      {{item.title}}
                     </p>
                   </a>
                 </div>
@@ -64,6 +64,7 @@
         },
         mounted() {
             this.getVillageData();
+            this.getSpecialtyData();
             window.addEventListener('scroll', this.setAnchor);
 
             this.mobile = window.innerWidth<992;
@@ -80,7 +81,9 @@
                 mobile:false,
                 villageId: this.$route.query.vid,
                 villageArr: [],
-                showItem: 0
+                specialtyArr: [],
+                showItem: 0,
+                villageType:"ARTICLE-TYPE-5DDA9B607D792",
             }
         },
         methods: {
@@ -90,11 +93,36 @@
                     id: this.villageId
                 }).then(res => {
                     this.villageArr = res.data;
+                })
 
-                    this.$nextTick(() => {
-                        this.initSwiper();
-                    })
 
+            },
+            // 获取特产数据
+            getSpecialtyData() {
+                // axios.get("../../static/data/villageResource.json", {
+                //     id: this.villageId
+                // }).then(res => {
+                //     this.villageArr = res.data;
+                //
+                //     this.$nextTick(() => {
+                //         this.initSwiper();
+                //     })
+                // })
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.villageType,
+                        page: 1,
+                        limit: 12,
+                        village_id:this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.specialtyArr = res.data.data.data;
+                        this.$nextTick(() => {
+                            this.initSwiper();
+                        })
+                    }
                 })
             },
             //右侧锚点

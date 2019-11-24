@@ -124,6 +124,10 @@ $mainColor: #37cf9f;
       .search-input {
         width: 360px;
         border: none;
+
+        &:focus{
+          outline: none;
+        }
       }
 
       .search-btn {

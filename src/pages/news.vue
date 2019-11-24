@@ -7,23 +7,23 @@
     <section class="news-box">
       <div class="list-box" v-for="(item,index) in newsArr">
         <div class="container">
-          <a href="">
+          <a :href="'/article?id='+item.uniqid">
             <div class="row">
               <div class="col-lg-1 news-date">
-                <p class="news-day">{{item.date | formatDateD}}</p>
-                <p class="news-year">{{item.date | formatDateYM}}</p>
+                <p class="news-day">{{item.create_time | formatDateD}}</p>
+                <p class="news-year">{{item.create_time | formatDateYM}}</p>
               </div>
-              <div :class="{'col-lg-9':item.imgUrl,'col-lg-11':!item.imgUrl}">
+              <div :class="{'col-lg-9':item.thumbnail,'col-lg-11':!item.thumbnail}">
                 <p class="name">
-                  {{item.name}}
+                  {{item.title}}
                 </p>
                 <p class="intro">
-                  {{item.intro}}
+                  {{item.excerpt}}
                 </p>
               </div>
-              <div class="col-lg-2" v-if="item.imgUrl">
+              <div class="col-lg-2" v-if="item.thumbnail">
                 <div class="img-box">
-                  <img :src="item.imgUrl" alt="">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                 </div>
               </div>
             </div>
@@ -31,6 +31,13 @@
         </div>
       </div>
     </section>
+
+    <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                  v-model="currentPage"
+                  :total-rows="rows"
+                  :per-page="perPage"
+                  @input="getNewsData"
+    ></b-pagination>
 
 
     <publicFooter/>
@@ -49,17 +56,36 @@
         data() {
             return {
                 show: 31,//当前栏目
-                newsArr: []
+                newsArr: [],
+                newsType:"ARTICLE-TYPE-5DD3A76B30129",
+                rows: '',
+                currentPage: 1,
+                perPage: 10,
             }
         },
         mounted() {
             this.getNewsData()
         },
         methods: {
-            //获取特色活动数据
+            //获取新闻动态数据
             getNewsData: function () {
-                axios.get("../../static/data/newsAll.json", {}).then(res => {
-                    this.newsArr = res.data
+                // axios.get("../../static/data/newsAll.json", {}).then(res => {
+                //     this.newsArr = res.data
+                // })
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                let perPage = this.perPage;
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.newsType,
+                        page: this.currentPage,
+                        limit: perPage,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.rows = resData.total;
+                        this.newsArr = resData.data;
+                    }
                 })
             }
         },

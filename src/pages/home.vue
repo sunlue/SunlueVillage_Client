@@ -30,8 +30,8 @@
       </div>
 
       <ul class="list-inline classify-box">
-        <li v-for="item in classify" class="list-inline-item classify-list">
-          <a href="/village">
+        <li v-for="(item,index) in classify" class="list-inline-item classify-list">
+          <a :href="'/village?cid='+index">
             <i class="list-icon"></i>
             <span class="list-text">
             {{item}}
@@ -167,8 +167,8 @@
                 newsType: "ARTICLE-TYPE-5DD3A76B30129",
                 classify: ['土货', '农场', '康养', '景点', '民俗', '民宿'],
                 newsList: [],
-                newsRecommendedList:[],
-                newsTopList:[],
+                newsRecommendedList: [],
+                newsTopList: [],
                 infomationList: [],
                 iframeArr: ['../../static/krpano/index.html', '../../static/krpano/index1.html', '../../static/krpano/index2.html', '../../static/krpano/index3.html', '../../static/krpano/index4.html'],
                 iframeArrIndex: ''
@@ -258,7 +258,7 @@
                         type: this.newsType,
                         page: 1,
                         limit: 7,
-                        hot:1,
+                        hot: 1,
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
@@ -274,7 +274,7 @@
                         type: this.newsType,
                         page: 1,
                         limit: 1,
-                        is_top:1,
+                        is_top: 1,
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
@@ -290,7 +290,7 @@
                         type: this.newsType,
                         page: 1,
                         limit: 5,
-                        recommended:1,
+                        recommended: 1,
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
@@ -314,7 +314,7 @@
                         type: this.informationType,
                         page: 1,
                         limit: 3,
-                        recommended:1
+                        recommended: 1
                     }
                 }).then(res => {
                     if (res.data.code === 200) {

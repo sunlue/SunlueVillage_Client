@@ -63,7 +63,7 @@
                       v-model="currentPage"
                       :total-rows="rows"
                       :per-page="perPage"
-                      @input="paging"
+                      @input="getHotVillage"
         ></b-pagination>
       </div>
     </div>
@@ -74,7 +74,7 @@
         <div class="row">
           <div class="col-lg-3 col-sm-6 list-item" v-for="item in hotRecommend">
             <div class="box">
-              <a href="">
+              <a :href="'/article?id='+item.uniqid">
                 <div class="img-box">
                   <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                 </div>
@@ -111,6 +111,8 @@
                 perPage: 12,
                 cityData: [{"label": "全部", "value": 0}],
                 classify: [],
+                villageCId: this.$route.query.cid,
+                classifyOption: [],
                 hotOrGood: 'hot',
                 hot: [],
                 nowTown: '0',
@@ -123,14 +125,13 @@
                 this.mobile = window.innerWidth < 992;
             };
             this.getCityData();
-            this.getHotVillage();
+            // this.getHotVillage();
             this.getHotRecommend();
             this.getVillageClassify();
         },
         methods: {
             // 点赞
             setLike: function (data, uniqid) {
-                console.log(uniqid)
                 for (let i = 0; i < data.length; i++) {
                     if (uniqid === data[i].uniqid) {
                         if (!data[i].isLike) {
@@ -149,10 +150,6 @@
             },
             // 获取乡镇信息
             getCityData: function () {
-                // let self = this
-                // axios.get('../../static/data/city.json').then(function (res) {
-                //     self.cityData = res.data
-                // })
                 let apiUrl = this.$config.apiUrl + 'region/read';
                 let town = this.townId;
                 axios.get(apiUrl).then((res) => {
@@ -167,15 +164,23 @@
             },
             // 获取村落分类
             getVillageClassify() {
+                let cid = this.villageCId>-1?this.villageCId:-1;
                 let apiUrl = this.$config.apiUrl + 'village/type/read';
                 axios.get(apiUrl).then((res) => {
                     if (res.data.code === 200) {
                         for (let i = 0; i < res.data.data.length; i++) {
-                            res.data.data[i].checked = false
+                            if(parseInt(cid)===i){
+                                res.data.data[i].checked = true
+                                this.classifyOption.push(res.data.data[i].uniqid);
+                            }else{
+                                res.data.data[i].checked = false
+                            }
                         }
                         this.classify = res.data.data;
+                        this.getHotVillage();
                     }
-                })
+                });
+
             },
             //热门和好评排序
             setHotOrGoodSort: function (num) {
@@ -186,40 +191,26 @@
                 }
             },
             // 选择特色分类
-            setClassify: function (index, uniqid) {
-                console.log(uniqid)
+            setClassify: function (index) {
+                this.classifyOption = []
                 this.classify[index].checked = !this.classify[index].checked;
+                this.classify.forEach((value,index)=>{
+                    if(value.checked){
+                        this.classifyOption.push(value.uniqid);
+                    }
+                });
+                this.getHotVillage();
             },
             // 获取村落数据
             getHotVillage: function () {
-                // let self = this
-                // axios.get('../../static/data/tuijiancunzhuang.json').then(function (res) {
-                //     self.hot = res.data;
-                //     self.sortByKey(self.hot, 'look');
-                // })
-                let apiUrl = this.$config.apiUrl + 'village/data/read';
-                let perPage = this.perPage;
-                axios.get(apiUrl, {
-                    params: {
-                        page: 1,
-                        limit: perPage
-                    }
-                }).then((res) => {
-                    if (res.data.code === 200) {
-                        let resData = res.data.data;
-                        this.rows = resData.total;
-                        this.hot = resData.data;
-                    }
-                })
-            },
-            // 翻页
-            paging() {
                 let apiUrl = this.$config.apiUrl + 'village/data/read';
                 let perPage = this.perPage;
                 axios.get(apiUrl, {
                     params: {
                         page: this.currentPage,
-                        limit: perPage
+                        limit: perPage,
+                        town:this.nowTown,
+                        type:this.classifyOption
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
@@ -232,7 +223,7 @@
 
             //更新数据
             changeData() {
-                console.log(this.nowTown)
+                this.getHotVillage()
             },
             // 获取热门推荐内容
             getHotRecommend: function () {
@@ -245,7 +236,9 @@
                 axios.get(apiUrl, {
                     params: {
                         page: 1,
-                        limit: 4
+                        limit: 4,
+                        recommended:1,
+                        hot:1
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {

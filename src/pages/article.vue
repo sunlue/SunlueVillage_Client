@@ -44,11 +44,11 @@
               <!--<router-link class="link-btn" :to="{ path: 'article', query: { id: articleId }}">精品语音讲解</router-link>-->
 
               <p class="recommend-title">热门推荐</p>
-              <div class="img-box" v-for="item in articleArr.recommend">
-                <router-link :to="{ path: 'article', query: { id: item.id }}">
-                  <img :src="item.img" alt="">
-                  <p class="recommend-list-title" :title="item.name">{{item.name}}</p>
-                </router-link>
+              <div class="img-box" v-for="item in hotRecommend">
+                <a :href="'/article?id='+item.uniqid">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
+                  <p class="recommend-list-title" :title="item.title">{{item.title}}</p>
+                </a>
               </div>
             </div>
           </div>
@@ -69,7 +69,8 @@
             return {
                 show: 99,
                 articleId: this.$route.query.id,
-                articleArr: {"prev":{},"next":{}}
+                articleArr: {"prev":{},"next":{}},
+                hotRecommend:[]
             }
         },
         components: {
@@ -78,6 +79,7 @@
         },
         mounted() {
             this.getArticle();
+            this.getHotData();
             const self = this;
             setTimeout(() => {
                 self.setShare()
@@ -92,6 +94,21 @@
                     id: this.articleId
                 }).then(res => {
                     this.articleArr = res.data
+                })
+            },
+            //热门推荐
+            getHotData(){
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        page: 1,
+                        limit: 4
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.hotRecommend = resData.data;
+                    }
                 })
             },
             setShare() {

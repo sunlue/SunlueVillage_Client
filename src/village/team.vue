@@ -12,13 +12,13 @@
             <p class="title">党支部</p>
             <div class="swiper-container branch-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in villageArr.specialty">
-                  <a href="">
+                <div class="swiper-slide" v-for="item in doubleArr">
+                  <a :href="'/article?id='+item.uniqid">
                     <div class="img-box">
-                      <img :src="item.img" alt="">
+                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                     </div>
-                    <p class="name" :title="item.name">
-                      {{item.name}}
+                    <p class="name" :title="item.title">
+                      {{item.title}}
                     </p>
                   </a>
                 </div>
@@ -36,13 +36,13 @@
             <p class="title">两新组织</p>
             <div class="swiper-container team-swiper">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in villageArr.specialty">
-                  <a href="">
+                <div class="swiper-slide" v-for="item in teamArr">
+                  <a :href="'/article?id='+item.uniqid">
                     <div class="img-box">
-                      <img :src="item.img" alt="">
+                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                     </div>
-                    <p class="name" :title="item.name">
-                      {{item.name}}
+                    <p class="name" :title="item.title">
+                      {{item.title}}
                     </p>
                   </a>
                 </div>
@@ -80,7 +80,9 @@
             publicFooter
         },
         mounted() {
-            this.getVillageData();
+            // this.getVillageData();
+            this.getDoubleData();
+            this.getTeamData();
             window.addEventListener('scroll', this.setAnchor);
 
             this.mobile = window.innerWidth < 992;
@@ -97,21 +99,63 @@
                 mobile: false,
                 villageId: this.$route.query.vid,
                 villageArr: [],
-                showItem: 0
+                doubleArr: [],
+                teamArr: [],
+                showItem: 0,
+                doubleType: "ARTICLE-TYPE-5DD63DAEF1AF5",
+                teamType: "ARTICLE-TYPE-5DDA9B3D61D8B",
+
             }
         },
         methods: {
-            //获取内容
-            getVillageData() {
-                axios.get("../../static/data/villageResource.json", {
-                    id: this.villageId
-                }).then(res => {
-                    this.villageArr = res.data;
+            // //获取内容
+            // getVillageData() {
+            //     axios.get("../../static/data/villageResource.json", {
+            //         id: this.villageId
+            //     }).then(res => {
+            //         this.villageArr = res.data;
+            //
+            //         this.$nextTick(() => {
+            //             this.initSwiper();
+            //         })
+            //
+            //     })
+            // },
 
-                    this.$nextTick(() => {
-                        this.initSwiper();
-                    })
+            // 获取两新组织数据
+            getDoubleData() {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.doubleType,
+                        page: 1,
+                        limit: 12,
+                        village_id: this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.doubleArr = res.data.data.data;
 
+                    }
+                })
+            },
+            // 获取党支部
+            getTeamData() {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.teamType,
+                        page: 1,
+                        limit: 12,
+                        village_id: this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.teamArr = res.data.data.data;
+                        this.$nextTick(() => {
+                            this.initSwiper();
+                        })
+                    }
                 })
             },
             //右侧锚点
@@ -151,7 +195,7 @@
                     // 如果需要分页器
                     pagination: {
                         el: '.branch-pagination',
-                        clickable:true
+                        clickable: true
                     },
                     // 如果需要前进后退按钮
                     navigation: {
@@ -168,7 +212,7 @@
                     // 如果需要分页器
                     pagination: {
                         el: '.team-pagination',
-                        clickable:true
+                        clickable: true
                     },
                     // 如果需要前进后退按钮
                     navigation: {
@@ -191,7 +235,7 @@
     background-color: #37cf9f;
   }
 
-  .swiper-container .swiper-pagination-bullet:focus{
+  .swiper-container .swiper-pagination-bullet:focus {
     outline: none;
   }
 </style>

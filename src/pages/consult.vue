@@ -7,13 +7,17 @@
         <div class="container-fluid">
           <div class="row">
             <div class="col-lg-8">
+<!--              <div class="clearfix left-list">-->
+<!--                <span class="list-name">咨询类别</span>-->
+<!--                <select class="consultSelect custom-select" name="" id="" v-model="type">-->
+<!--                  <option value="0">乡镇村落</option>-->
+<!--                  <option value="1">乡镇文化</option>-->
+<!--                  <option value="2">乡镇发展</option>-->
+<!--                </select>-->
+<!--              </div>-->
               <div class="clearfix left-list">
                 <span class="list-name">咨询类别</span>
-                <select class="consultSelect custom-select" name="" id="" v-model="type">
-                  <option value="0">乡镇村落</option>
-                  <option value="1">乡镇文化</option>
-                  <option value="2">乡镇发展</option>
-                </select>
+                <input class="form-control consultSelect" type="text" placeholder="请输入咨询类别" v-model="type">
               </div>
               <div class="clearfix left-list">
                 <span class="list-name">咨询内容</span>
@@ -72,7 +76,8 @@
                 questionTitle: '',
                 questionValue: '',
                 questionArr: [],
-                type: 0,
+                // type: 0,
+                type: "",
                 details: "",
                 phone: "",
                 code: "",
@@ -89,8 +94,15 @@
         methods: {
             //获取热门问题
             getQuestion() {
-                axios.get("../../static/data/question.json").then(res => {
-                    this.questionArr = res.data
+                // axios.get("../../static/data/question.json").then(res => {
+                //     this.questionArr = res.data
+                // })
+                let apiUrl = this.$config.apiUrl + 'portal/message/read';
+                axios.get(apiUrl).then((res) => {
+                    if (res.data.code === 200) {
+                        console.log(res)
+                        this.questionArr = res.data.data;
+                    }
                 })
             },
             // 显示问题答案
@@ -127,9 +139,17 @@
                     this.$bvModal.show("modal-sm");
                     return
                 }
-
-                this.hint = "提交成功";
-                this.$bvModal.show("modal-sm");
+                let apiUrl = this.$config.apiUrl + 'portal/message/create';
+                axios.post(apiUrl,{
+                    type:this.type,
+                    content:this.details,
+                    mobile_tel:this.phone
+                }).then(res=>{
+                    if(res.data.code===200){
+                        this.hint = "提交成功";
+                        this.$bvModal.show("modal-sm");
+                    }
+                })
             }
         }
     }

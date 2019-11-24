@@ -14,7 +14,7 @@
         <span class="name">乡镇</span>
         <div class="city-select-box">
           <select class="citySelect custom-select" name="" id="">
-            <option :value="list.id" v-for="list in cityData">{{list.name}}</option>
+            <option :value="list.value" v-for="list in cityData">{{list.label}}</option>
           </select>
         </div>
         <span v-if="!mobile" class="separator"></span>
@@ -79,7 +79,8 @@
             return {
                 show: 1,
                 mobile:false,
-                cityData: [],
+                cityData: [{"label": "全部", "value": 0}],
+                townId:"510703000000",
                 classify: [
                     {name: '土货', checked: false},
                     {name: '农场', checked: false},
@@ -103,9 +104,16 @@
         methods: {
             // 获取乡镇信息
             getCityData: function () {
-                let self = this
-                axios.get('../../static/data/city.json').then(function (res) {
-                    self.cityData = res.data
+                let apiUrl = this.$config.apiUrl + 'region/read';
+                let town = this.townId;
+                axios.get(apiUrl).then((res) => {
+                    if (res.data.code === 200) {
+                        res.data.data.forEach((value, index) => {
+                            if (value.parent == town) {
+                                this.cityData.push(value)
+                            }
+                        });
+                    }
                 })
             },
             //设置热门和好评分类

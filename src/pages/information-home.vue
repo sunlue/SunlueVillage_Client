@@ -203,7 +203,8 @@
                     params: {
                         type: this.informationType,
                         page: 1,
-                        limit: 6
+                        limit: 6,
+                        recommended:1
                     }
                 }).then(res=> {
                     if (res.data.code === 200) {

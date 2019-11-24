@@ -10,28 +10,34 @@
 
           <div class="culture list-jump">
             <p class="title">信息动态</p>
-            <a href="" class="row message-list" v-for="(item,index) in villageNewsArr">
+            <a :href="'/article?id='+item.uniqid" class="row message-list" v-for="(item,index) in villageNewsArr">
               <div class="col-lg-1 news-date">
-                <p class="news-day">{{item.date | formatDateD}}</p>
-                <p class="news-year">{{item.date | formatDateYM}}</p>
+                <p class="news-day">{{item.create_time | formatDateD}}</p>
+                <p class="news-year">{{item.create_time | formatDateYM}}</p>
               </div>
-              <div :class="{'col-lg-9':item.imgUrl,'col-lg-11':!item.imgUrl}">
+              <div :class="{'col-lg-9':item.thumbnail,'col-lg-11':!item.thumbnail}">
                 <p class="name">
-                  {{item.name}}
+                  {{item.title}}
                 </p>
                 <p class="intro">
-                  {{item.intro}}
+                  {{item.excerpt}}
                 </p>
               </div>
-              <div class="col-lg-2" v-if="item.imgUrl">
+              <div class="col-lg-2" v-if="item.thumbnail">
                 <div class="img-box">
-                  <img :src="item.imgUrl" alt="">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
                 </div>
               </div>
             </a>
           </div>
         </div>
       </div>
+      <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                    v-model="currentPage"
+                    :total-rows="rows"
+                    :per-page="perPage"
+                    @input="getVillageData"
+      ></b-pagination>
     </section>
     <publicFooter/>
   </div>
@@ -54,17 +60,31 @@
                 show: 5,
                 villageId: this.$route.query.vid,
                 villageNewsArr: [],
-                showItem: 0
+                showItem: 0,
+                newsType:"ARTICLE-TYPE-5DD3A76B30129",
+                rows: '',
+                currentPage: 1,
+                perPage: 10,
             }
         },
         methods: {
             //获取内容
             getVillageData() {
-                axios.get("../../static/data/newsAll.json", {
-                    id: this.villageId
-                }).then(res => {
-                    this.villageNewsArr = res.data;
-                    console.log(res.data)
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                let perPage = this.perPage;
+                axios.get(apiUrl, {
+                    params: {
+                        type: this.newsType,
+                        page: this.currentPage,
+                        limit: perPage,
+                        village_id:this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.rows = resData.total;
+                        this.villageNewsArr = resData.data;
+                    }
                 })
             }
         },

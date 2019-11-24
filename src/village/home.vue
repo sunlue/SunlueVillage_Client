@@ -43,22 +43,22 @@
           <p class="icon-list" :class="{'audio-play':audioPlay}" @click="playAudio">
             <i class="icon"></i>
             <span class="text">解说</span>
-            <audio class="village-audio" :src="villageArr.audio"></audio>
+            <audio class="village-audio" :src="$config.apiUrl + villageArr.audio"></audio>
           </p>
         </div>
         <div class="details-box">
           <p>
             <span class="name">{{villageArr.name}}</span>
-            <span class="address">{{villageArr.address}}</span>
+            <span class="address">{{villageArr.town_text}}</span>
           </p>
           <p>
-            <span class="tag" v-for="item in villageArr.tag">{{item}}</span>
+            <span class="tag" v-for="item in villageArr.tag">{{item.value}}</span>
           </p>
           <p>
-            <span class="classify" v-for="item in villageArr.classify">{{item}}</span>
+            <span class="classify" v-for="item in villageArr.type">{{item}}</span>
           </p>
           <p>
-            <span class="intro">{{villageArr.intro}}</span>
+            <span class="intro" v-html="villageArr.content"></span>
             <router-link class="more" :to="{ path: 'village-culture', query: { vid:villageId}}">
               更多
             </router-link>
@@ -69,7 +69,8 @@
     </section>
 
     <b-modal id="video-modal" centered size="xl" :title="villageArr.name" hide-footer>
-      <video class="village-home-video" :src="villageArr.video" controls></video>
+      <video v-if="villageArr.video" class="village-home-video" :src="$config.apiUrl + villageArr.video" controls></video>
+      <p v-if="!villageArr.video">暂无视频</p>
     </b-modal>
 
     <publicFooter/>
@@ -106,10 +107,16 @@
         methods: {
             //获取当前村子数据
             getVillageData:function(){
-                axios.get("../../static/data/villagePage.json",{
-                    id:this.villageId
-                }).then(res=>{
-                    this.villageArr = res.data
+                let apiUrl = this.$config.apiUrl + 'village/data/details';
+                axios.get(apiUrl, {
+                    params: {
+                        uniqid: this.villageId,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.villageArr = res.data.data;
+                        console.log(this.villageArr)
+                    }
                 })
             },
             // 初始化banner
@@ -167,5 +174,16 @@
   .village-home-video:focus{
     border:none;
     outline: none;
+  }
+
+  #village-home .content-box .intro *{
+    text-overflow: -o-ellipsis-lastline;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    margin: 0;
   }
 </style>
