@@ -152,7 +152,9 @@ $mainColor: #37cf9f;
     border-radius: 2px;
   }
 }
-
+iframe{
+  border:none;
+}
 .classify-box {
   position: absolute;
   top: 71%;

@@ -4,9 +4,9 @@
     <section class="village-box">
       <div class="swiper-container village-banner">
         <div class="swiper-wrapper">
-          <div class="swiper-slide" v-for="item in villageArr.photo">
+          <div class="swiper-slide" v-for="item in banner">
             <div class="img-box">
-              <img :src="item" alt="">
+              <img :src="$config.apiUrl + item.image" alt="">
             </div>
           </div>
         </div>
@@ -17,11 +17,12 @@
       <div class="village-thumbs-box">
         <div class="swiper-container village-thumbs">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in villageArr.photo">
+            <div class="swiper-slide" v-for="item in banner">
               <div class="img-box">
-                <img :src="item" alt="">
+                <img :src="$config.apiUrl + item.image" alt="">
               </div>
             </div>
+
           </div>
         </div>
       </div>
@@ -31,7 +32,7 @@
 
         <div class="icon-box">
           <p class="icon-list">
-            <a :href="villageArr.panorama" target="_blank">
+            <a :href="panorama.length>0?panorama:'javascript:void(0)'" :target="panorama.length>0?'_blank':''">
               <i class="icon"></i>
               <span class="text">VR</span>
             </a>
@@ -69,7 +70,8 @@
     </section>
 
     <b-modal id="video-modal" centered size="xl" :title="villageArr.name" hide-footer>
-      <video v-if="villageArr.video" class="village-home-video" :src="$config.apiUrl + villageArr.video" controls></video>
+      <video v-if="villageArr.video" class="village-home-video" :src="$config.apiUrl + villageArr.video"
+             controls></video>
       <p v-if="!villageArr.video">暂无视频</p>
     </b-modal>
 
@@ -91,22 +93,26 @@
         data() {
             return {
                 show: 1,
-                boxClose:false,
-                audioPlay:false,
-                villageId:this.$route.query.vid,
-                villageArr:[]
+                boxClose: false,
+                audioPlay: false,
+                villageId: this.$route.query.vid,
+                villageArr: [],
+                panorama: [],
+                banner: []
             }
         },
-        created(){
-            this.boxClose = window.innerWidth<992;
+        created() {
+            this.boxClose = window.innerWidth < 992;
         },
         mounted() {
             this.setVillageBanner();
             this.getVillageData();
+            this.getPanorama();
+            this.gerBanner();
         },
         methods: {
             //获取当前村子数据
-            getVillageData:function(){
+            getVillageData: function () {
                 let apiUrl = this.$config.apiUrl + 'village/data/details';
                 axios.get(apiUrl, {
                     params: {
@@ -115,7 +121,19 @@
                 }).then((res) => {
                     if (res.data.code === 200) {
                         this.villageArr = res.data.data;
-                        console.log(this.villageArr)
+                    }
+                })
+            },
+            // 获取轮播图
+            gerBanner: function () {
+                let apiUrl = this.$config.apiUrl + 'village/slide/read';
+                axios.get(apiUrl, {
+                    params: {
+                        village_id: this.villageId,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.banner = res.data.data;
                     }
                 })
             },
@@ -130,7 +148,7 @@
 
                 let villageBanner = new Swiper('.village-banner', {
                     observer: true,
-                    autoplay:true,
+                    autoplay: true,
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
@@ -141,13 +159,30 @@
                 });
 
             },
+            getPanorama: function () {
+                let apiUrl = this.$config.apiUrl + 'village/krpano/read';
+                axios.get(apiUrl, {
+                    params: {
+                        page: 1,
+                        limit: 1,
+                        village_id: this.villageId,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data.data
+                        if(resData.length>0){
+                            this.panorama = res.data.data.data[0].link;
+                        }
+                    }
+                })
+            },
             // 播放音乐
-            playAudio:function(){
+            playAudio: function () {
                 let audio = document.querySelector("audio");
-                if(this.audioPlay){
+                if (this.audioPlay) {
                     audio.pause();
                     this.audioPlay = false
-                }else{
+                } else {
                     audio.play();
                     this.audioPlay = true
                 }
@@ -155,9 +190,9 @@
             // 播放视频
             showModal() {
                 this.$bvModal.show("video-modal");
-                setTimeout(function(){
+                setTimeout(function () {
                     document.querySelector(".village-home-video").play();
-                },200);
+                }, 200);
             },
         }
     }
@@ -165,18 +200,18 @@
 <style src="../assets/css/villageHome.css" scoped>
 </style>
 <style>
-  .village-home-video{
+  .village-home-video {
     width: 100%;
     height: 100%;
     object-fit: cover;
   }
 
-  .village-home-video:focus{
-    border:none;
+  .village-home-video:focus {
+    border: none;
     outline: none;
   }
 
-  #village-home .content-box .intro *{
+  #village-home .content-box .intro * {
     text-overflow: -o-ellipsis-lastline;
     overflow: hidden;
     text-overflow: ellipsis;

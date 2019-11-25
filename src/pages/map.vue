@@ -5,24 +5,25 @@
       <baidu-map class="bm-view" center="绵阳市" @ready="getMapStyle" :mapStyle="mapStyle" :scroll-wheel-zoom="true"
                  :zoom="zoom" :min-zoom="minZoom" :max-zoom="maxZoom">
         <bm-marker v-if="allVillage[index].isShow" v-for="(item,index) in allVillage"
-                   :position="{lng: item.lng, lat: item.lat}" :key="index" :icon="allVillage[index].isHover?icon:iconH"
-                   @mouseout="changerMarker(index)" @mouseover="changerMarker(index)" @click="jumpVillageList(item.id)">
+                   :position="{lng: item.coord.lng, lat: item.coord.lat}" :key="index" :icon="allVillage[index].isHover?icon:iconH"
+                   @mouseout="changerMarker(index)" @mouseover="changerMarker(index)" @click="jumpVillageList(item.uniqid)">
           <bm-label :content="item.name" :labelStyle="allVillage[index].isHover?labelStyle:labelStyleH"
                     :offset="offset"/>
         </bm-marker>
       </baidu-map>
+
       <div class="filter-box" :class="{'filter-box-close':!showFilter}">
         <div class="close-box" @click="showFilter=!showFilter"></div>
         <p class="towns-box">
           <span class="name">乡镇</span>
-          <select v-model="nowTown" class="citySelect custom-select" name="" id="">
+          <select v-model="nowTown" class="citySelect custom-select" @change="changeData">
             <option :value="list.value" v-for="list in cityData">{{list.label}}</option>
           </select>
         </p>
         <p class="feature-box">
           <span class="name">特色</span>
           <span class="village-classify-list" :class="{'active':list.checked}" v-for="(list,index) in classify"
-                @click="setClassify(index)">{{list.name}}</span>
+                @click="setClassify(index,list.uniqid)">{{list.name}}</span>
         </p>
         <p class="search-box">
           <span class="name">关键词</span>
@@ -211,7 +212,7 @@
                 let apiUrl = this.$config.apiUrl + 'village/data/read';
                 axios.get(apiUrl, {
                     params: {
-                        search: this.searchData
+                        name: this.searchData
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
@@ -257,6 +258,10 @@
             changerMarker: function (index) {
                 this.allVillage[index].isHover = !this.allVillage[index].isHover
             },
+            //更新数据
+            changeData() {
+                this.getAllVillage()
+            },
             //获取全部乡村
             getAllVillage: function () {
                 let apiUrl = this.$config.apiUrl + 'village/data/read';
@@ -270,24 +275,31 @@
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
-                        this.allVillage = res.data.data.data;
-                        res.data.data.data.forEach((value,index)=>{
-                            axios.get(apiGeo, {
-                            }).then(result=>{
-                                console.log(result)
-                            })
-                        })
-
+                        let resData = res.data.data.data;
+                        for (let i = 0; i < resData.length; i++) {
+                            resData[i].isHover = true;
+                            resData[i].isShow = true
+                        }
+                        this.allVillage = resData;
+                        console.log(this.allVillage)
                     }
                 })
             },
+
             // 跳转链接
             jumpVillageList: function (id) {
                 this.$router.push({path: 'village-home', query: {vid: id}});
             },
             // 选择特色分类
             setClassify: function (index) {
+                this.classifyOption = []
                 this.classify[index].checked = !this.classify[index].checked;
+                this.classify.forEach((value,index)=>{
+                    if(value.checked){
+                        this.classifyOption.push(value.uniqid);
+                    }
+                });
+                this.getAllVillage();
             },
 
             // 获取热门推荐内容

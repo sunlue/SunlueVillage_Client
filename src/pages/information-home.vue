@@ -126,7 +126,6 @@
                     }
                 }).then((res)=>{
                     if (res.data.code === 200) {
-                        console.log(res.data.data)
                         this.banner = res.data.data;
                         this.$nextTick(() => {
                             this.initBannerSwiper()

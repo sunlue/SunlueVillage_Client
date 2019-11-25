@@ -11,27 +11,27 @@
 
             <div class="col-lg-9">
               <p class="name">
-                {{articleArr.name}}
+                {{articleArr.title}}
               </p>
               <div class="clearfix">
                 <span class="date">
-                  {{articleArr.date | formatDate}}
+                  {{articleArr.create_time | formatDate}}
                 </span>
                 <div class="bdsharebuttonbox">
                   <a href="#" class="share bds_weixin" data-cmd="weixin" title="分享到微信">分享</a>
                 </div>
                 <span class="hit">
-                  {{articleArr.hit}}
+                  {{articleArr.hits}}
                 </span>
               </div>
               <div class="content-box" v-html="articleArr.content"></div>
               <p class="prev-next-box clearfix">
-                <router-link class="float-left prev-btn" :to="{ path: 'article', query: { id: articleArr.prev.id }}">
-                  {{articleArr.prev.name}}
-                </router-link>
-                <router-link class="float-right next-btn" :to="{ path: 'article', query: { id: articleArr.next.id }}">
-                  {{articleArr.next.name}}
-                </router-link>
+                <a class="float-left prev-btn" :href="'/article?id='+articleArr.prev.uniqid">
+                  {{articleArr.prev.title}}
+                </a>
+                <a class="float-right next-btn" :href="'/article?id='+articleArr.next.uniqid">
+                  {{articleArr.next.title}}
+                </a>
               </p>
 
               <p class="retreat-btn" @click="back">
@@ -90,10 +90,16 @@
                 this.$router.back();
             },
             getArticle() {
-                axios.get("../../static/data/article.json", {
-                    id: this.articleId
-                }).then(res => {
-                    this.articleArr = res.data
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/details';
+                axios.get(apiUrl, {
+                    params: {
+                        uniqid: this.articleId,
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.articleArr = resData;
+                    }
                 })
             },
             //热门推荐

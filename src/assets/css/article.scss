@@ -87,6 +87,11 @@
       padding-left: 30px;
       position: relative;
       transition: .3s;
+      max-width: 50%;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      display: block;
 
       &::after {
         position: absolute;
@@ -114,6 +119,11 @@
       padding-right: 30px;
       position: relative;
       transition: .3s;
+      max-width: 50%;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      white-space: nowrap;
+      display: block;
 
       &::after {
         position: absolute;

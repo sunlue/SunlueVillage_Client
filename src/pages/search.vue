@@ -6,21 +6,36 @@
       <div class="search-box">
         <span class="name">搜索</span>
         <div class="input-box">
-          <input class="search-input" type="text" placeholder="请输入关键词" v-model="searchValue" v-on:keyup.enter="getNewsData">
-          <span class="search-btn" @click="getNewsData"></span>
+          <input class="search-input" type="text" placeholder="请输入关键词" v-model="searchValue" v-on:keyup.enter="getSearch">
+          <span class="search-btn" @click="getSearch"></span>
         </div>
       </div>
     </section>
     <section class="news-box">
-      <div class="list-box" v-for="(item,index) in search">
+      <div class="list-box" v-for="(item,index) in searchVillage">
         <div class="container">
-          <a href="">
+          <a :href="'village-home?vid='+item.uniqid">
             <div class="row">
-              <div class="offset-lg-2" :class="{'col-lg-9':item.imgUrl,'col-lg-11':!item.imgUrl}">
+              <div class="offset-lg-2 col-lg-9">
                 <p class="name" v-html="ruleTitle(item.name)">
                 </p>
                 <p class="intro">
-                  {{item.intro}}
+                  {{item.content | removeHtml}}
+                </p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="list-box" v-for="(item,index) in searchArticle">
+        <div class="container">
+          <a :href="'article?id='+item.uniqid">
+            <div class="row">
+              <div class="offset-lg-2 col-lg-9">
+                <p class="name" v-html="ruleTitle(item.title)">
+                </p>
+                <p class="intro">
+                  {{item.content | removeHtml}}
                 </p>
               </div>
             </div>
@@ -47,18 +62,43 @@
             return {
                 show: 1,//当前栏目
                 search: [],
+                searchVillage: [],
+                searchArticle: [],
                 searchValue: decodeURIComponent(this.$route.query.antistop),
             }
         },
         mounted() {
-            this.getNewsData()
+            this.getSearch();
         },
         methods: {
-            //获取特色活动数据
-            getNewsData: function () {
-                console.log(1)
-                axios.get("../../static/data/search.json", {}).then(res => {
-                    this.search = res.data
+            getSearch:function(){
+                this.getVillageData();
+                this.getArticleData();
+            },
+            //获取搜索村庄数据
+            getVillageData: function () {
+                let apiUrl = this.$config.apiUrl + 'village/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        name: this.searchValue
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.searchVillage = res.data.data;
+                    }
+                })
+            },
+            //获取文章数据
+            getArticleData: function () {
+                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                axios.get(apiUrl, {
+                    params: {
+                        title: this.searchValue
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.searchArticle = res.data.data;
+                    }
                 })
             },
             // 搜索词高亮
@@ -76,6 +116,18 @@
                     titleString = titleString.replace(replaceReg, replaceString);
                 }
                 return titleString;
+            }
+        },
+        filters:{
+            removeHtml:function(input){
+              return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                  .replace(/(&rdquo;)/g, '\"')
+                  .replace(/&ldquo;/g, '\"')
+                  .replace(/&mdash;/g, '-')
+                  .replace(/&nbsp;/g, '')
+                  .replace(/&gt;/g, '>')
+                  .replace(/&lt;/g, '<')
+                  .replace(/<[\w\s"':=\/]*/, '');
             }
         }
     }

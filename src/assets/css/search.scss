@@ -1,5 +1,6 @@
 .news-box {
   padding: 40px 0 210px;
+  min-height: 56vh;
   background: url(../../../static/images/homeNewsBg.png) no-repeat center bottom;
 
   .list-box {
@@ -79,6 +80,13 @@
       font-size: 14px;
       color: #999;
       margin: 0;
+      text-overflow: -o-ellipsis-lastline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      line-clamp: 3;
+      -webkit-box-orient: vertical;
     }
   }
 }

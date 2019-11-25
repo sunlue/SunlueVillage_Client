@@ -23,7 +23,7 @@
       </div>
 
       <div class="hot-list-box">
-        <a href="/village-home" class="hot-name">热门</a>
+        <a href="/village" class="hot-name">热门</a>
         <a class="hot-list" v-for="item in hot" :href="'/village-home?vid='+item.uniqid">
           {{ item.name }}
         </a>
@@ -339,7 +339,7 @@
                     on: {
                         slideChange: function () {
                             let index = this.realIndex;
-                            self.activeNews = self.newsList[index].title;
+                            self.activeNews = self.newsRecommendedList[index].title;
                         }
                     },
                 })

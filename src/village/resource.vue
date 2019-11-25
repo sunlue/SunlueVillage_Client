@@ -10,9 +10,9 @@
 
           <div class="culture list-jump">
             <p class="title">村落资源</p>
-            <div class="culture-list" v-for="(item,index) in villageArr.resource">
+            <div class="culture-list" v-for="(item,index) in sceneryArr">
               <p class="name"><span class="num-btn">{{index + 1}}</span>{{item.name}}</p>
-              <div class="details">{{item.content}}</div>
+              <div class="details">{{item.intro}}</div>
             </div>
           </div>
           <div class="history list-jump">
@@ -65,6 +65,7 @@
         mounted() {
             this.getVillageData();
             this.getSpecialtyData();
+            this.getScenery();
             window.addEventListener('scroll', this.setAnchor);
 
             this.mobile = window.innerWidth<992;
@@ -82,6 +83,7 @@
                 villageId: this.$route.query.vid,
                 villageArr: [],
                 specialtyArr: [],
+                sceneryArr: [],
                 showItem: 0,
                 villageType:"ARTICLE-TYPE-5DDA9B607D792",
             }
@@ -123,6 +125,19 @@
                             this.initSwiper();
                         })
                     }
+                })
+            },
+            // 获取风景名胜
+            getScenery() {
+                let apiUrl = this.$config.apiUrl + 'village/scenic/read';
+                axios.get(apiUrl, {
+                    params: {
+                        village_id: this.villageId,
+                        page:1,
+                        limit:12
+                    }
+                }).then((res) => {
+                    this.sceneryArr = res.data.data.data
                 })
             },
             //右侧锚点
