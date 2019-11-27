@@ -21,7 +21,7 @@ Vue.prototype.$myfunction = myfunction
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  router:router,
-  components: { index },
+  router: router,
+  components: {index},
   template: '<index/>',
 })

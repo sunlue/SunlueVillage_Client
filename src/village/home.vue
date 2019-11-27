@@ -2,6 +2,12 @@
   <div id="village-home" class="inside-box">
     <villageHead :show="show" :vid="villageId"/>
     <section class="village-box">
+      <div class="panorama-box" v-if="panoramaShow">
+        <iframe :src="villageArr.tour" frameborder="0" width="100%" height="100%">
+        </iframe>
+        <span class="panorama-close" @click="panoramaShow = false"></span>
+      </div>
+
       <div class="swiper-container village-banner">
         <div class="swiper-wrapper">
           <div class="swiper-slide" v-for="item in banner">
@@ -28,26 +34,29 @@
       </div>
 
       <div class="content-box" :class="{'content-box-close':boxClose}">
-        <div class="close-btn" @click="boxClose=!boxClose"></div>
 
         <div class="icon-box">
-          <p class="icon-list">
-            <a :href="panorama.length>0?panorama:'javascript:void(0)'" :target="panorama.length>0?'_blank':''">
-              <i class="icon"></i>
-              <span class="text">VR</span>
-            </a>
+          <p class="icon-list" @mouseleave="pauseAni(aniArr[0])" @mouseenter="playAni(aniArr[0])" @click="panoramaShow = !panoramaShow">
+<!--            <a :href="panorama.length>0?panorama:'javascript:void(0)'" :target="panorama.length>0?'_blank':''" >-->
+<!--              <i class="icon village-icon"></i>-->
+<!--              <span class="text">VR</span>-->
+<!--            </a>-->
+            <i class="icon village-icon"></i>
+            <span class="text">VR</span>
           </p>
-          <p class="icon-list" @click="showModal">
-            <i class="icon"></i>
+          <p class="icon-list" @click="showModal" @mouseleave="pauseAni(aniArr[1])" @mouseenter="playAni(aniArr[1])">
+            <i class="icon village-icon"></i>
             <span class="text">视频</span>
           </p>
           <p class="icon-list" :class="{'audio-play':audioPlay}" @click="playAudio">
-            <i class="icon"></i>
+            <i class="icon village-icon"></i>
             <span class="text">解说</span>
             <audio class="village-audio" :src="$config.apiUrl + villageArr.audio"></audio>
           </p>
         </div>
         <div class="details-box">
+          <div class="close-btn" @click="boxClose=!boxClose"></div>
+
           <p>
             <span class="name">{{villageArr.name}}</span>
             <span class="address">{{villageArr.town_text}}</span>
@@ -59,15 +68,16 @@
             <span class="classify" v-for="item in villageArr.type">{{item}}</span>
           </p>
           <p>
-            <span class="intro" v-html="villageArr.content"></span>
+            <span class="intro">{{villageArr.content | removeHtml}}</span>
             <router-link class="more" :to="{ path: 'village-culture', query: { vid:villageId}}">
-              更多
+              详细
             </router-link>
           </p>
         </div>
       </div>
 
     </section>
+
 
     <b-modal id="video-modal" centered size="xl" :title="villageArr.name" hide-footer>
       <video v-if="villageArr.video" class="village-home-video" :src="$config.apiUrl + villageArr.video"
@@ -84,6 +94,10 @@
     import Swiper from "swiper"
     import axios from "axios"
     import "swiper/css/swiper.min.css"
+    import lottie from 'lottie-web'
+    import aniIcon1 from '../../static/icon/quanjing.json'
+    import aniIcon2 from '../../static/icon/video.json'
+    import aniIcon3 from '../../static/icon/audio.json'
 
     export default {
         components: {
@@ -98,7 +112,9 @@
                 villageId: this.$route.query.vid,
                 villageArr: [],
                 panorama: [],
-                banner: []
+                banner: [],
+                aniArr: [],
+                panoramaShow:false
             }
         },
         created() {
@@ -109,6 +125,7 @@
             this.getVillageData();
             this.getPanorama();
             this.gerBanner();
+            this.initAni();
         },
         methods: {
             //获取当前村子数据
@@ -148,7 +165,9 @@
 
                 let villageBanner = new Swiper('.village-banner', {
                     observer: true,
-                    autoplay: true,
+                    autoplay: {
+                        delay:5000
+                    },
                     navigation: {
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
@@ -182,9 +201,11 @@
                 if (this.audioPlay) {
                     audio.pause();
                     this.audioPlay = false
+                    this.pauseAni(this.aniArr[2])
                 } else {
                     audio.play();
                     this.audioPlay = true
+                    this.playAni(this.aniArr[2])
                 }
             },
             // 播放视频
@@ -194,6 +215,40 @@
                     document.querySelector(".village-home-video").play();
                 }, 200);
             },
+            // 播放动画
+            playAni(item) {
+                item.play();
+            },
+            //暂停动画
+            pauseAni(item) {
+                item.stop();
+            },
+            // 初始化动画
+            initAni() {
+                let aniList = [aniIcon1, aniIcon2, aniIcon3];
+                aniList.forEach((v, i) => {
+                    let aniConfig = {
+                        container: document.querySelectorAll('.village-icon')[i],
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: false,
+                        animationData: v
+                    };
+                    this.aniArr[i] = lottie.loadAnimation(aniConfig);
+                });
+            },
+        },
+        filters:{
+            removeHtml:function(input){
+                return input && input.replace(/<(?:.|\n)*?>/gm, '')
+                    .replace(/(&rdquo;)/g, '\"')
+                    .replace(/&ldquo;/g, '\"')
+                    .replace(/&mdash;/g, '-')
+                    .replace(/&nbsp;/g, '')
+                    .replace(/&gt;/g, '>')
+                    .replace(/&lt;/g, '<')
+                    .replace(/<[\w\s"':=\/]*/, '');
+            }
         }
     }
 </script>
@@ -220,5 +275,14 @@
     line-clamp: 3;
     -webkit-box-orient: vertical;
     margin: 0;
+  }
+
+  #village-home path {
+    stroke: #666;
+    fill: #666;
+  }
+  #village-home .audio-play path {
+    stroke: #37cf9f;
+    fill: #37cf9f;
   }
 </style>

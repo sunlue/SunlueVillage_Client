@@ -7,12 +7,19 @@
             <img src="../../static/images/logoBlack.png" alt="logo" title="主页">
           </a>
         </h1>
+        <h5 class="float-left village-name" v-html="village">
+        </h5>
         <ul class="float-left list-inline head-list-box">
-          <li class="list-inline-item head-list" :class="{active:show === 1}"><a :href="'/village-home?vid='+vid">村首页</a></li>
-          <li class="list-inline-item head-list" :class="{active:show === 2}"><a :href="'/village-culture?vid='+vid">文化概况</a></li>
-          <li class="list-inline-item head-list" :class="{active:show === 3}"><a :href="'/village-resource?vid='+vid">资源产物</a></li>
-          <li class="list-inline-item head-list" :class="{active:show === 4}"><a :href="'/village-team?vid='+vid">组织党建</a></li>
-          <li class="list-inline-item head-list" :class="{active:show === 5}"><a :href="'/village-message?vid='+vid">信息动态</a></li>
+          <li class="list-inline-item head-list" :class="{active:show === 1}"><a
+            :href="'/village-home?vid='+vid">村首页</a></li>
+          <li class="list-inline-item head-list" :class="{active:show === 2}"><a :href="'/village-culture?vid='+vid">文化概况</a>
+          </li>
+          <li class="list-inline-item head-list" :class="{active:show === 3}"><a :href="'/village-resource?vid='+vid">资源产物</a>
+          </li>
+          <li class="list-inline-item head-list" :class="{active:show === 4}"><a
+            :href="'/village-team?vid='+vid">组织党建</a></li>
+          <li class="list-inline-item head-list" :class="{active:show === 5}"><a :href="'/village-message?vid='+vid">信息动态</a>
+          </li>
         </ul>
         <!--<div class="float-right login-btn">
           <a href="/login">
@@ -40,6 +47,8 @@
   </div>
 </template>
 <script>
+    import axios from "axios"
+
     export default {
         props: {
             show: {
@@ -51,10 +60,26 @@
                 required: true
             },
         },
-        data(){
-            return{
-                closeBtn:false
+        data() {
+            return {
+                closeBtn: false,
+                village:"&nbsp;&nbsp;&nbsp;"
             }
+        },
+        methods: {
+            getVillage() {
+                let apiUrl = this.$config.apiUrl + 'village/data/details';
+                axios.get(apiUrl, {
+                    params: {
+                        uniqid: this.vid
+                    }
+                }).then((res) => {
+                    this.village = res.data.data.name
+                })
+            }
+        },
+        mounted() {
+            this.getVillage();
         }
     }
 </script>

@@ -40,8 +40,8 @@
         color: #999;
         border-bottom: 1px solid #eee;
 
-        &:hover{
-          .name,.date{
+        &:hover {
+          .name, .date {
             color: #37cf9f;
           }
         }
@@ -253,8 +253,18 @@
   max-width: 1500px;
   margin: auto;
 
+
   .list-box {
     float: left;
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
+
     //width: 180px;
     //height: 72px;
     //margin-right: 40px;
@@ -413,7 +423,7 @@
       }
     }
   }
-  .serve-list-news{
+  .serve-list-news {
     padding: 0 0 60px !important;
   }
 }

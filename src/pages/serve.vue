@@ -176,7 +176,7 @@
     <section class="news-box">
       <div class="list-box" v-for="(item,index) in serve">
         <div class="container">
-          <a href="">
+          <a :href="'/article?id='+item.uniqid">
             <div class="row">
               <div class="col-lg-1 news-date">
                 <p class="news-day">{{item.create_time | formatDateD}}</p>
@@ -218,8 +218,8 @@
         },
         data() {
             return {
-                show: 5,
-                listType:"ARTICLE-TYPE-5DDA3FF9C6531",
+                show: 4,
+                listType: "ARTICLE-TYPE-5DDA3FF9C6531",
                 serve: [],
                 dataList: [],
                 hotList: [],

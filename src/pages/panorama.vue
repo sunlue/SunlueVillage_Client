@@ -6,14 +6,14 @@
     </section>
     <div class="village-box">
       <div class="village-classify">
-        <span class="hot" @click="setHotOrGoodSort('hot'),sortByKey(hot,'look')" :class="{'active':hotOrGood === 'hot'}">热门</span>
+        <span class="hot" @click="setHotOrGoodSort('hot'),sortByKey(hot,'hits')" :class="{'active':hotOrGood == 'hot'}">热门</span>
         <span class="good" @click="setHotOrGoodSort('good'),sortByKey(hot,'like')"
-              :class="{'active':hotOrGood === 'good'}">好评</span>
+              :class="{'active':hotOrGood == 'good'}">好评</span>
         <span v-if="!mobile" class="separator"></span>
         <br v-if="mobile">
         <span class="name">乡镇</span>
         <div class="city-select-box">
-          <select class="citySelect custom-select" name="" id="">
+          <select v-model="nowTown" class="citySelect custom-select" @change="changeData">
             <option :value="list.value" v-for="list in cityData">{{list.label}}</option>
           </select>
         </div>
@@ -21,41 +21,50 @@
         <br v-if="mobile">
         <span class="name">特色</span>
         <span class="village-classify-list" :class="{'active':list.checked}" v-for="(list,index) in classify"
-              @click="setClassify(index)">{{list.name}}</span>
+              @click="setClassify(index,list.uniqid)">{{list.name}}</span>
       </div>
     </div>
     <div class="common-hot-box">
       <div class="container">
         <div class="row">
-          <div class="hot-list" :class="{'col-lg-6':index<2,'col-lg-3 col-sm-6':index>=2,'panorama':index<2}" v-for="(item,index) in hot">
+          <div class="hot-list" :class="{'col-lg-6':index<2,'col-lg-3 col-sm-6':index>=2,'panorama':index<2}"
+               v-for="(item,index) in hot">
             <div class="box">
-              <div class="img-box">
-                <a href="">
-                  <img v-bind:src="item.imgUrl" alt="" :title="item.name">
-                </a>
-              </div>
+              <a :href="item.tour" :target="item.blank">
+                <div class="img-box">
+                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.name">
+                </div>
+              </a>
+
               <div class="text-box">
                 <p class="clearfix">
-                  <a href="">
+                  <a :href="'village-home?vid='+item.uniqid">
                     <span class="name">{{item.name}}</span>
                   </a>
-                  <span class="address">{{item.address}}</span>
+                  <span class="address">{{item.town_text}}</span>
                 </p>
                 <p class="type-box">
-                  <span class="type" v-for="list in item.villageType">
+                  <span class="type" v-for="list in item.type">
                     {{list}}
                   </span>
                 </p>
                 <p class="clearfix">
-                  <span class="look">{{item.look}}</span>
-                  <span class="comment">{{item.comment}}</span>
+                  <span class="look">{{item.hits}}</span>
+                  <!--                  <span class="comment">{{item.comment}}</span>-->
                   <span class="like" :class="{'likeActive':hot[index].isLike===true}"
-                        @click="$myfunction.setLike(hot,item.id,)">{{item.like}}</span>
+                        @click="setLike(hot,item.uniqid)">{{item.like}}</span>
                 </p>
               </div>
             </div>
           </div>
         </div>
+
+        <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                      v-model="currentPage"
+                      :total-rows="rows"
+                      :per-page="perPage"
+                      @input="getHotVillage"
+        ></b-pagination>
       </div>
     </div>
 
@@ -78,30 +87,47 @@
         data() {
             return {
                 show: 1,
-                mobile:false,
+                mobile: false,
+                currentPage: 1,
+                rows: '',
+                townId: "510703000000",
+                perPage: 12,
                 cityData: [{"label": "全部", "value": 0}],
-                townId:"510703000000",
-                classify: [
-                    {name: '土货', checked: false},
-                    {name: '农场', checked: false},
-                    {name: '康养', checked: false},
-                    {name: '景点', checked: false},
-                    {name: '民俗', checked: false},
-                    {name: '民宿', checked: false}
-                ],
+                classify: [],
+                villageCId: this.$route.query.cid,
+                classifyOption: [],
                 hotOrGood: 'hot',
-                hot: []
+                hot: [],
+                nowTown: '0'
             }
         },
         mounted: function () {
-            this.mobile = window.innerWidth<992;
-            window.onresize = res=>{
-                this.mobile = window.innerWidth<992;
+            this.mobile = window.innerWidth < 992;
+            window.onresize = res => {
+                this.mobile = window.innerWidth < 992;
             };
             this.getCityData();
-            this.getHotVillage();
+            // this.getHotVillage();
+            this.getVillageClassify();
         },
         methods: {
+            // 点赞
+            setLike: function (data, uniqid) {
+                for (let i = 0; i < data.length; i++) {
+                    if (uniqid === data[i].uniqid) {
+                        if (!data[i].isLike) {
+                            axios.put(this.$config.apiUrl + "village/data/like", {
+                                uniqid: uniqid
+                            }).then(res => {
+                                if (res.data.code === 200) {
+                                    data[i].like = parseInt(data[i].like) + 1;
+                                    data[i].isLike = true
+                                }
+                            })
+                        }
+                    }
+                }
+            },
             // 获取乡镇信息
             getCityData: function () {
                 let apiUrl = this.$config.apiUrl + 'region/read';
@@ -116,7 +142,27 @@
                     }
                 })
             },
-            //设置热门和好评分类
+            // 获取村落分类
+            getVillageClassify() {
+                let cid = this.villageCId > -1 ? this.villageCId : -1;
+                let apiUrl = this.$config.apiUrl + 'village/type/read';
+                axios.get(apiUrl).then((res) => {
+                    if (res.data.code === 200) {
+                        for (let i = 0; i < res.data.data.length; i++) {
+                            if (parseInt(cid) === i) {
+                                res.data.data[i].checked = true
+                                this.classifyOption.push(res.data.data[i].uniqid);
+                            } else {
+                                res.data.data[i].checked = false
+                            }
+                        }
+                        this.classify = res.data.data;
+                        this.getHotVillage();
+                    }
+                });
+
+            },
+            //热门和好评排序
             setHotOrGoodSort: function (num) {
                 if (num === 'hot') {
                     this.hotOrGood = 'hot'
@@ -126,15 +172,47 @@
             },
             // 选择特色分类
             setClassify: function (index) {
+                this.classifyOption = []
                 this.classify[index].checked = !this.classify[index].checked;
+                this.classify.forEach((value, index) => {
+                    if (value.checked) {
+                        this.classifyOption.push(value.uniqid);
+                    }
+                });
+                this.getHotVillage();
             },
-            // 获取热门村庄
+            // 获取村落数据
             getHotVillage: function () {
-                let self = this
-                axios.get('../../static/data/tuijiancunzhuang.json').then(function (res) {
-                    self.hot = res.data;
-                    self.sortByKey(self.hot, 'look');
+                let apiUrl = this.$config.apiUrl + 'village/data/read';
+                let perPage = this.perPage;
+                axios.get(apiUrl, {
+                    params: {
+                        page: this.currentPage,
+                        limit: perPage,
+                        town: this.nowTown,
+                        type: this.classifyOption
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        let resData = res.data.data;
+                        this.rows = resData.total;
+
+                        resData.data.forEach((v,i)=>{
+                            if(v.tour ===''){
+                                v.tour = "javascript:void(0)";
+                                v.blank = "";
+                            }else{
+                                v.blank = "_blank";
+                            }
+                        });
+                        this.hot = resData.data;
+                    }
                 })
+            },
+
+            //更新数据
+            changeData() {
+                this.getHotVillage()
             },
             //数组对象排序
             sortByKey: function (array, key) {

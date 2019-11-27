@@ -31,10 +31,14 @@
               </div>
               <div class="clearfix left-list">
                 <span class="list-name">验证</span>
-                <input class="form-control code-input" type="text" placeholder="验证码" v-model="code">
+<!--                <input class="form-control code-input" type="text" placeholder="验证码" v-model="code">-->
+<!--                <p class="code-img">-->
+<!--                  <img src="../../static/images/code.png" alt="">-->
+<!--                </p>-->
                 <p class="code-img">
-                  <img src="../../static/images/code.png" alt="">
+                  <drag ref="captcha"></drag>
                 </p>
+
               </div>
               <span class="submit-btn" @click="submitData">
                 提交
@@ -67,7 +71,9 @@
 <script>
     import publicHead from "../components/publicHead"
     import publicFooter from "../components/publicFooter"
+    import drag from "../components/drag"
     import axios from "axios"
+
 
     export default {
         data() {
@@ -86,7 +92,8 @@
         },
         components: {
             publicHead,
-            publicFooter
+            publicFooter,
+            drag
         },
         mounted() {
             this.getQuestion();
@@ -100,7 +107,6 @@
                 let apiUrl = this.$config.apiUrl + 'portal/message/read';
                 axios.get(apiUrl).then((res) => {
                     if (res.data.code === 200) {
-                        console.log(res)
                         this.questionArr = res.data.data;
                     }
                 })
@@ -114,6 +120,7 @@
             //提交数据
             submitData() {
                 const rule = /^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(17[0,3,5-8])|(18[0-9])|166|198|199|(147))\d{8}$/
+                let code_state = this.$refs.captcha.confirmSuccess;
                 if (this.type === '') {
                     this.hint = "请选择咨询类别";
                     this.$bvModal.show("modal-sm");
@@ -134,8 +141,8 @@
                     this.$bvModal.show("modal-sm");
                     return
                 }
-                if (this.code === '') {
-                    this.hint = "请输入验证码";
+                if (!code_state) {
+                    this.hint = "请按住滑块，拖动到最右边";
                     this.$bvModal.show("modal-sm");
                     return
                 }
@@ -147,6 +154,10 @@
                 }).then(res=>{
                     if(res.data.code===200){
                         this.hint = "提交成功";
+                        this.$bvModal.show("modal-sm");
+                        this.type = this.details = this.phone = "";
+                    }else{
+                        this.hint = "提交失败，请重试！";
                         this.$bvModal.show("modal-sm");
                     }
                 })

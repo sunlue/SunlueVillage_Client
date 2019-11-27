@@ -9,28 +9,28 @@
         <div class="container-fluid">
           <div class="row">
 
-            <div class="col-lg-9">
+            <div class="col-lg-9 article-block">
               <p class="name">
-                {{articleArr.title}}
+                {{articleArr.title}}{{articleArr.name}}
               </p>
               <div class="clearfix">
                 <span class="date">
-                  {{articleArr.create_time | formatDate}}
+                  {{articleArr.create_time}}
                 </span>
                 <div class="bdsharebuttonbox">
                   <a href="#" class="share bds_weixin" data-cmd="weixin" title="分享到微信">分享</a>
                 </div>
-                <span class="hit">
+                <span class="hit" v-if="articleArr.hits>-1">
                   {{articleArr.hits}}
                 </span>
               </div>
               <div class="content-box" v-html="articleArr.content"></div>
               <p class="prev-next-box clearfix">
-                <a class="float-left prev-btn" :href="'/article?id='+articleArr.prev.uniqid">
-                  {{articleArr.prev.title}}
+                <a class="float-left prev-btn" :href="'/article?id='+prevBtn.uniqid">
+                  {{prevBtn.title}}
                 </a>
-                <a class="float-right next-btn" :href="'/article?id='+articleArr.next.uniqid">
-                  {{articleArr.next.title}}
+                <a class="float-right next-btn" :href="'/article?id='+nextBtn.uniqid">
+                  {{nextBtn.title}}
                 </a>
               </p>
 
@@ -38,7 +38,7 @@
                 返回列表
               </p>
             </div>
-            <div class="col-lg-3">
+            <div class="col-lg-3 article-block">
               <a class="link-btn" href="/map">村落地图导览</a>
               <a class="link-btn" href="/panorama">VR 720°全景体验</a>
               <!--<router-link class="link-btn" :to="{ path: 'article', query: { id: articleId }}">精品语音讲解</router-link>-->
@@ -69,8 +69,12 @@
             return {
                 show: 99,
                 articleId: this.$route.query.id,
-                articleArr: {"prev":{},"next":{}},
-                hotRecommend:[]
+                sceneryId: this.$route.query.sid,
+                relicsId: this.$route.query.rid,
+                articleArr: [],
+                hotRecommend: [],
+                prevBtn:[],
+                nextBtn:[]
             }
         },
         components: {
@@ -86,24 +90,50 @@
             }, 0);
         },
         methods: {
-            back(){
+            back() {
                 this.$router.back();
             },
+            // 获取文章详情
             getArticle() {
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/details';
+                let apiUrl;
+                let aid;
+                if (this.articleId) {
+                    apiUrl = this.$config.apiUrl + 'portal/article/data/details';
+                    aid = this.articleId;
+                } else if (this.sceneryId) {
+                    apiUrl = this.$config.apiUrl + 'village/scenic/details';
+                    aid = this.sceneryId;
+                } else if (this.relicsId) {
+                    apiUrl = this.$config.apiUrl + 'village/relics/details';
+                    aid = this.relicsId;
+                }
                 axios.get(apiUrl, {
                     params: {
-                        uniqid: this.articleId,
+                        uniqid: aid,
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
                         let resData = res.data.data;
+                        if(resData.next){
+                            this.nextBtn = resData.next;
+                            this.prevBtn = resData.prev;
+                        }else{
+                            this.nextBtn = {
+                                uniqid:'',
+                                title:''
+                            };
+                            this.prevBtn = {
+                                uniqid:'',
+                                title:''
+                            };
+                        }
+                        resData.create_time = this.formatDate(resData.create_time);
                         this.articleArr = resData;
                     }
                 })
             },
             //热门推荐
-            getHotData(){
+            getHotData() {
                 let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
                 axios.get(apiUrl, {
                     params: {
@@ -135,9 +165,7 @@
                 s.type = 'text/javascript';
                 s.src = 'http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion=' + ~(-new Date() / 36e5);
                 document.body.appendChild(s);
-            }
-        },
-        filters: {
+            },
             formatDate: function (value) {
                 let date = new Date(value);
                 let y = date.getFullYear();

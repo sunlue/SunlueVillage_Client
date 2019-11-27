@@ -3,40 +3,22 @@
     <villageHead :show="show" :vid="villageId"/>
     <section>
       <div class="village-banner">
-        <img class="img-fluid" src="../../static/images/teamBanner.jpg" alt="">
+        <img class="img-fluid" :src="$config.apiUrl + teamArr.banner" alt="">
       </div>
       <div class="content-box">
         <div class="container-fluid">
 
           <div class="history list-jump">
             <p class="title">党支部</p>
-            <div class="swiper-container branch-swiper">
-              <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in doubleArr">
-                  <a :href="'/article?id='+item.uniqid">
-                    <div class="img-box">
-                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
-                    </div>
-                    <p class="name" :title="item.title">
-                      {{item.title}}
-                    </p>
-                  </a>
-                </div>
-              </div>
-              <!-- 如果需要分页器 -->
-              <div class="swiper-pagination branch-pagination"></div>
-
-              <!-- 如果需要导航按钮 -->
-              <div class="swiper-button-prev branch-prev"></div>
-              <div class="swiper-button-next branch-next"></div>
+            <div v-html="teamArr.content">
             </div>
           </div>
 
           <div class="history list-jump">
             <p class="title">两新组织</p>
-            <div class="swiper-container team-swiper">
+            <div class="swiper-container team-swiper" :style="{height:doubleArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
-                <div class="swiper-slide" v-for="item in teamArr">
+                <div class="swiper-slide" v-for="item in doubleArr">
                   <a :href="'/article?id='+item.uniqid">
                     <div class="img-box">
                       <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.title">
@@ -135,26 +117,22 @@
                 }).then((res) => {
                     if (res.data.code === 200) {
                         this.doubleArr = res.data.data.data;
-
+                        this.$nextTick(() => {
+                            this.initSwiper();
+                        })
                     }
                 })
             },
             // 获取党支部
             getTeamData() {
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+                let apiUrl = this.$config.apiUrl + 'village/group/details';
                 axios.get(apiUrl, {
                     params: {
-                        type: this.teamType,
-                        page: 1,
-                        limit: 12,
                         village_id: this.villageId
                     }
                 }).then((res) => {
                     if (res.data.code === 200) {
-                        this.teamArr = res.data.data.data;
-                        this.$nextTick(() => {
-                            this.initSwiper();
-                        })
+                        this.teamArr = res.data.data;
                     }
                 })
             },
@@ -191,6 +169,7 @@
                     observer: true,
                     slidesPerView: this.mobile ? 1 : 3,
                     slidesPerColumn: this.mobile ? 1 : 2,
+                    slidesPerColumnFill : 'row',
                     spaceBetween: 30,
                     // 如果需要分页器
                     pagination: {
@@ -208,6 +187,7 @@
                     observer: true,
                     slidesPerView: this.mobile ? 1 : 3,
                     slidesPerColumn: this.mobile ? 1 : 2,
+                    slidesPerColumnFill : 'row',
                     spaceBetween: 30,
                     // 如果需要分页器
                     pagination: {

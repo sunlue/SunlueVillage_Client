@@ -12,14 +12,16 @@
       </div>
 
       <div class="search">
-        <div class="search-box">
+        <div class="search-box" @mouseleave="pauseAni(searchAni)" @mouseenter="playAni(searchAni)">
           <input type="text" v-on:keyup.enter="submitData" v-model="searchData" class="search-input"
                  placeholder="请输入关键词">
           <router-link class="search-btn"
-                       :to="{ path: 'search', query: { antistop: encodeURIComponent(this.searchData) }}"><img
-            src="../../static/images/searchBtn.png"></router-link>
+                       :to="{ path: 'search', query: { antistop: encodeURIComponent(this.searchData) }}"></router-link>
         </div>
-        <a href="/map" class="village-address">村落分布</a>
+        <a href="/map" class="village-address" @mouseleave="pauseAni(addressAni)" @mouseenter="playAni(addressAni)">
+          <span class="home-address-mores"></span>
+          <span class="home-address-text">村落分布</span>
+        </a>
       </div>
 
       <div class="hot-list-box">
@@ -30,9 +32,13 @@
       </div>
 
       <ul class="list-inline classify-box">
-        <li v-for="(item,index) in classify" class="list-inline-item classify-list">
+        <li v-for="(item,index) in classify" class="list-inline-item classify-list" :key="index"
+            @mouseleave="pauseAni(aniArr[index])" @mouseenter="playAni(aniArr[index])">
           <a :href="'/village?cid='+index">
-            <i class="list-icon"></i>
+            <div class="icon-box">
+              <!--              <i class="list-icon"></i>-->
+              <i class="home-class-icon"></i>
+            </div>
             <span class="list-text">
             {{item}}
           </span>
@@ -149,6 +155,15 @@
     import axios from "axios"
     import Swiper from "swiper"
     import "swiper/css/swiper.min.css"
+    import lottie from 'lottie-web'
+    import jingdianIcon from '../../static/icon/jingdian.json'
+    import minsuIcon from '../../static/icon/minsu.json'
+    import minsu2Icon from '../../static/icon/minsu2.json'
+    import nongchangIcon from '../../static/icon/nongchang.json'
+    import techanIcon from '../../static/icon/techan.json'
+    import yangshengIcon from '../../static/icon/yangsheng.json'
+    import addressIcon from '../../static/icon/address.json'
+    import searchIcon from '../../static/icon/search.json'
 
     export default {
         name: "home",
@@ -171,7 +186,10 @@
                 newsTopList: [],
                 infomationList: [],
                 iframeArr: ['../../static/krpano/index.html', '../../static/krpano/index1.html', '../../static/krpano/index2.html', '../../static/krpano/index3.html', '../../static/krpano/index4.html'],
-                iframeArrIndex: ''
+                iframeArrIndex: '',
+                aniArr: [],
+                addressAni:[],
+                searchAni:[]
             }
         },
         mounted: function () {
@@ -182,6 +200,7 @@
             this.getNews();
             this.getTopNews();
             this.getInformation();
+            this.initAni();
             this.iframeArrIndex = ~~(Math.random() * this.iframeArr.length);
             window.addEventListener('scroll', this.getRightBtnPosition, false);
         },
@@ -343,6 +362,47 @@
                         }
                     },
                 })
+            },
+            // 初始化动画
+            initAni() {
+                let aniList = [techanIcon, nongchangIcon, yangshengIcon, jingdianIcon, minsuIcon, minsu2Icon];
+                aniList.forEach((v, i) => {
+                    let aniConfig = {
+                        container: document.querySelectorAll('.home-class-icon')[i],
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: false,
+                        animationData: v
+                    };
+                    this.aniArr[i] = lottie.loadAnimation(aniConfig);
+                });
+
+                let addressData = {
+                    container: document.querySelector('.home-address-mores'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: false,
+                    animationData: addressIcon
+                };
+                this.addressAni = lottie.loadAnimation(addressData);
+
+                let searchData = {
+                    container: document.querySelector('.search-btn'),
+                    renderer: 'svg',
+                    loop: true,
+                    autoplay: false,
+                    animationData: searchIcon
+                };
+                this.searchAni = lottie.loadAnimation(searchData);
+
+            },
+            // 播放动画
+            playAni(item) {
+                item.play();
+            },
+            //暂停动画
+            pauseAni(item) {
+                item.stop();
             }
         },
         filters: {
@@ -377,5 +437,18 @@
   .home-news #newsSwiper .swiper-pagination .swiper-pagination-bullet-active {
     width: 38px;
     background-color: #37cf9f;
+  }
+
+  .classify-box path {
+    stroke: #fff;
+    fill: #fff;
+  }
+  .search-btn path {
+    stroke: #37d09f;
+    fill: #37d09f;
+  }
+  .village-address path {
+    stroke: #fff;
+    fill: #fff;
   }
 </style>

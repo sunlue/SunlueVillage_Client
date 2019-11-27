@@ -14,6 +14,7 @@
           <li class="list-inline-item head-list" :class="{active:show === 3||show === 31}"><a href="/information-home">资讯</a>
           </li>
           <li class="list-inline-item head-list" :class="{active:show === 4}"><a href="/serve">服务</a></li>
+          <li class="list-inline-item head-list" :class="{active:show === 5}"><a href="javascript:void(0)">电商</a></li>
         </ul>
         <!--<div class="float-right login-btn">
           <a href="/login">
@@ -24,30 +25,30 @@
     </div>
 
     <div class="broadside-box" :class="{'broadside-box-center':rightBtn}">
-      <div class="broadside-list">
+      <div class="broadside-list" @mouseleave="pauseAni(aniArr[0])" @mouseenter="playAni(aniArr[0])">
         <a href="/panorama">
-          <i class="list-icon"></i>
+          <i class="list-icon public-list-icon"></i>
           <p class="list-text">全景</p>
         </a>
       </div>
 
-      <div class="broadside-list">
+      <div class="broadside-list" @mouseleave="pauseAni(aniArr[1])" @mouseenter="playAni(aniArr[1])">
         <div @click="$bvModal.show('QRCode-modal')">
-          <i class="list-icon"></i>
+          <i class="list-icon public-list-icon"></i>
           <p class="list-text">微信</p>
         </div>
       </div>
 
-      <div class="broadside-list">
+      <div class="broadside-list" @mouseleave="pauseAni(aniArr[2])" @mouseenter="playAni(aniArr[2])">
         <a href="/consult">
-          <i class="list-icon"></i>
+          <i class="list-icon public-list-icon"></i>
           <p class="list-text">咨询</p>
         </a>
       </div>
 
-      <div class="broadside-list">
-        <a href="">
-          <i class="list-icon"></i>
+      <div class="broadside-list" @mouseleave="pauseAni(aniArr[3])" @mouseenter="playAni(aniArr[3])">
+        <a href="javascript:void(0)">
+          <i class="list-icon public-list-icon"></i>
           <p class="list-text">分享</p>
         </a>
       </div>
@@ -77,6 +78,12 @@
 </template>
 
 <script>
+    import lottie from 'lottie-web'
+    import quanjingIcon from '../../static/icon/rightquanjing.json'
+    import zixunIcon from '../../static/icon/zixun.json'
+    import weixinIcon from '../../static/icon/weixin.json'
+    import fenxiangIcon from '../../static/icon/fenxiang.json'
+
     export default {
         props: {
             show: {
@@ -90,8 +97,36 @@
         },
         data() {
             return {
-                closeBtn: false
+                closeBtn: false,
+                aniArr: []
             }
+        },
+        mounted(){
+            this.initAni();
+        },
+        methods:{
+            // 播放动画
+            playAni(item) {
+                item.play();
+            },
+            //暂停动画
+            pauseAni(item) {
+                item.stop();
+            },
+            // 初始化动画
+            initAni() {
+                let aniList = [quanjingIcon, weixinIcon, zixunIcon, fenxiangIcon];
+                aniList.forEach((v, i) => {
+                    let aniConfig = {
+                        container: document.querySelectorAll('.public-list-icon')[i],
+                        renderer: 'svg',
+                        loop: true,
+                        autoplay: false,
+                        animationData: v
+                    };
+                    this.aniArr[i] = lottie.loadAnimation(aniConfig);
+                });
+            },
         }
     }
 </script>

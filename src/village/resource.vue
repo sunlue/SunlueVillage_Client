@@ -3,21 +3,37 @@
     <villageHead :show="show" :vid="villageId"/>
     <section>
       <div class="village-banner">
-        <img class="img-fluid" src="../../static/images/villageResourceBanner.jpg" alt="">
+        <img class="img-fluid" :src="$config.apiUrl + banner" alt="">
       </div>
       <div class="content-box">
         <div class="container-fluid">
 
           <div class="culture list-jump">
-            <p class="title">村落资源</p>
-            <div class="culture-list" v-for="(item,index) in sceneryArr">
-              <p class="name"><span class="num-btn">{{index + 1}}</span>{{item.name}}</p>
-              <div class="details">{{item.intro}}</div>
+            <p class="title">风景名胜</p>
+            <div class="swiper-container team-swiper" :style="{height:sceneryArr.length>3?'':'auto'}">
+              <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="item in sceneryArr">
+                  <a :href="'/article?sid='+item.uniqid">
+                    <div class="img-box">
+                      <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.name">
+                    </div>
+                    <p class="name" :title="item.name">
+                      {{item.name}}
+                    </p>
+                  </a>
+                </div>
+              </div>
+              <!-- 如果需要分页器 -->
+              <div class="swiper-pagination team-pagination"></div>
+
+              <!-- 如果需要导航按钮 -->
+              <div class="swiper-button-prev team-prev"></div>
+              <div class="swiper-button-next team-next"></div>
             </div>
           </div>
           <div class="history list-jump">
             <p class="title">特色物产</p>
-            <div class="swiper-container specialty-swiper">
+            <div class="swiper-container specialty-swiper" :style="{height:specialtyArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
                 <div class="swiper-slide" v-for="item in specialtyArr">
                   <a :href="'/article?id='+item.uniqid">
@@ -43,7 +59,7 @@
     </section>
 
     <div class="right-anchor">
-      <p class="list" :class="{'active':showItem==0}" @click="goLocation(0)">村落资源</p>
+      <p class="list" :class="{'active':showItem==0}" @click="goLocation(0)">风景名胜</p>
       <p class="list" :class="{'active':showItem==1}" @click="goLocation(1)">特色物产</p>
       <p class="list" @click="returnTop">返回顶部</p>
     </div>
@@ -66,6 +82,7 @@
             this.getVillageData();
             this.getSpecialtyData();
             this.getScenery();
+            this.getBanner();
             window.addEventListener('scroll', this.setAnchor);
 
             this.mobile = window.innerWidth<992;
@@ -86,6 +103,7 @@
                 sceneryArr: [],
                 showItem: 0,
                 villageType:"ARTICLE-TYPE-5DDA9B607D792",
+                banner:""
             }
         },
         methods: {
@@ -101,15 +119,6 @@
             },
             // 获取特产数据
             getSpecialtyData() {
-                // axios.get("../../static/data/villageResource.json", {
-                //     id: this.villageId
-                // }).then(res => {
-                //     this.villageArr = res.data;
-                //
-                //     this.$nextTick(() => {
-                //         this.initSwiper();
-                //     })
-                // })
                 let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
                 axios.get(apiUrl, {
                     params: {
@@ -163,6 +172,19 @@
                     }
                 }, 10);
             },
+            // 获取banner
+            getBanner() {
+                let apiUrl = this.$config.apiUrl + 'village/group/details';
+                axios.get(apiUrl, {
+                    params: {
+                        village_id: this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.banner = res.data.data.banner;
+                    }
+                })
+            },
             //去指定位置
             goLocation(i) {
                 document.documentElement.scrollTop = document.querySelectorAll(".list-jump")[i].offsetTop;
@@ -173,20 +195,36 @@
                     observer: true,
                     slidesPerView: this.mobile?1:3,
                     slidesPerColumn: this.mobile?1:2,
+                    slidesPerColumnFill : 'row',
                     spaceBetween: 30,
                     // 如果需要分页器
                     pagination: {
                         el: '.specialty-pagination',
                         clickable:true
                     },
-
-
                     // 如果需要前进后退按钮
                     navigation: {
                         nextEl: '.specialty-next',
                         prevEl: '.specialty-prev',
                     },
-                })
+                });
+                new Swiper('.team-swiper', {
+                    observer: true,
+                    slidesPerView: this.mobile ? 1 : 3,
+                    slidesPerColumn: this.mobile?1:2,
+                    slidesPerColumnFill : 'row',
+                    spaceBetween: 30,
+                    // 如果需要分页器
+                    pagination: {
+                        el: '.team-pagination',
+                        clickable: true
+                    },
+                    // 如果需要前进后退按钮
+                    navigation: {
+                        nextEl: '.team-next',
+                        prevEl: '.team-prev',
+                    },
+                });
             }
         }
     }
@@ -198,7 +236,7 @@
     max-width: 100%;
   }
 
-  .specialty-swiper .swiper-pagination-bullet-active {
+  .swiper-container .swiper-pagination-bullet-active {
     background-color: #37cf9f;
   }
 

@@ -3,7 +3,7 @@
     <villageHead :show="show" :vid="villageId"/>
     <section>
       <div class="village-banner">
-        <img class="img-fluid" src="../../static/images/villageMessageBanner.jpg" alt="">
+        <img class="img-fluid" :src="$config.apiUrl + banner" alt="">
       </div>
       <div class="content-box">
         <div class="container-fluid">
@@ -54,6 +54,7 @@
         },
         mounted() {
             this.getVillageData();
+            this.getBanner();
         },
         data() {
             return {
@@ -65,6 +66,7 @@
                 rows: '',
                 currentPage: 1,
                 perPage: 10,
+                banner:""
             }
         },
         methods: {
@@ -86,7 +88,20 @@
                         this.villageNewsArr = resData.data;
                     }
                 })
-            }
+            },
+            // 获取banner
+            getBanner() {
+                let apiUrl = this.$config.apiUrl + 'village/group/details';
+                axios.get(apiUrl, {
+                    params: {
+                        village_id: this.villageId
+                    }
+                }).then((res) => {
+                    if (res.data.code === 200) {
+                        this.banner = res.data.data.banner;
+                    }
+                })
+            },
         },
         filters: {
             formatDateYM: function (value) {

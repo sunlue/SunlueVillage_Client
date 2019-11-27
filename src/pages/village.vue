@@ -255,7 +255,8 @@
                     let y = parseInt(b[key]);
                     return ((x > y) ? -1 : ((x < y) ? 1 : 0));
                 })
-            }
+            },
+
         }
     }
 </script>

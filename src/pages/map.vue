@@ -34,7 +34,7 @@
           </span>
         </p>
 
-        <div class="search-result">
+        <div class="search-result" v-if="searchResult.length>1">
           <p>
             <span class="name">
               搜索结果
@@ -119,23 +119,6 @@
             this.getHotRecommend();
             this.getVillageClassify();
 
-            new Swiper('.search-result-swiper', {
-                observer: true,
-                slidesPerView: 3,
-                spaceBetween: 10,
-                slidesPerGroup: 3,
-                // 如果需要分页器
-                pagination: {
-                    el: '.search-result-pagination',
-                    clickable: true
-                },
-                // 如果需要前进后退按钮
-                navigation: {
-                    nextEl: '.search-result-next',
-                    prevEl: '.search-result-prev',
-                }
-            });
-
             new Swiper('.hot-recommend-swiper', {
                 observer: true,
                 slidesPerView: 3,
@@ -217,6 +200,24 @@
                 }).then((res) => {
                     if (res.data.code === 200) {
                         this.searchResult = res.data.data;
+                        this.$nextTick(()=>{
+                            new Swiper('.search-result-swiper', {
+                                observer: true,
+                                slidesPerView: 3,
+                                spaceBetween: 10,
+                                slidesPerGroup: 3,
+                                // 如果需要分页器
+                                pagination: {
+                                    el: '.search-result-pagination',
+                                    clickable: true
+                                },
+                                // 如果需要前进后退按钮
+                                navigation: {
+                                    nextEl: '.search-result-next',
+                                    prevEl: '.search-result-prev',
+                                }
+                            });
+                        })
                     }
                 })
             },
@@ -281,7 +282,6 @@
                             resData[i].isShow = true
                         }
                         this.allVillage = resData;
-                        console.log(this.allVillage)
                     }
                 })
             },

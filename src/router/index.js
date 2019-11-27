@@ -13,6 +13,7 @@ import panorama from '@/pages/panorama'
 import article from '@/pages/article'
 import serve from '@/pages/serve'
 import serveList from '@/pages/serve-list'
+import dataView from '@/pages/dataView'
 import villageHome from '@/village/home'
 import villageCulture from '@/village/culture'
 import villageResource from '@/village/resource'
@@ -83,6 +84,11 @@ export default new Router({
       path: '/serve-list',
       name: '服务内页',
       component: serveList
+    },
+    {
+      path: '/data-view',
+      name: '大数据引用',
+      component: dataView
     },
     {
       path: '/consult',
