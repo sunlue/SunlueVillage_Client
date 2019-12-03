@@ -6,6 +6,9 @@
         <iframe :src="villageArr.tour" frameborder="0" width="100%" height="100%">
         </iframe>
         <span class="panorama-close" @click="panoramaShow = false"></span>
+        <span class="tips" v-if="!villageArr.tour">
+          全景正在制作中...
+        </span>
       </div>
 
       <div class="swiper-container village-banner">
@@ -20,23 +23,23 @@
         <div class="swiper-button-next village-banner-next"></div>
       </div>
 
-      <div class="village-thumbs-box">
-        <div class="swiper-container village-thumbs">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in banner">
-              <div class="img-box">
-                <img :src="$config.apiUrl + item.image" alt="">
-              </div>
-            </div>
+<!--      <div class="village-thumbs-box">-->
+<!--        <div class="swiper-container village-thumbs">-->
+<!--          <div class="swiper-wrapper">-->
+<!--            <div class="swiper-slide" v-for="item in banner">-->
+<!--              <div class="img-box">-->
+<!--                <img :src="$config.apiUrl + item.image" alt="">-->
+<!--              </div>-->
+<!--            </div>-->
 
-          </div>
-        </div>
-      </div>
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
       <div class="content-box" :class="{'content-box-close':boxClose}">
 
         <div class="icon-box">
-          <p class="icon-list" @mouseleave="pauseAni(aniArr[0])" @mouseenter="playAni(aniArr[0])" @click="panoramaShow = !panoramaShow">
+          <p class="icon-list" @mouseleave="pauseAni(aniArr[0])" @mouseenter="playAni(aniArr[0])" @click="panoramaShow = !panoramaShow,boxClose=true">
 <!--            <a :href="panorama.length>0?panorama:'javascript:void(0)'" :target="panorama.length>0?'_blank':''" >-->
 <!--              <i class="icon village-icon"></i>-->
 <!--              <span class="text">VR</span>-->
@@ -156,12 +159,12 @@
             },
             // 初始化banner
             setVillageBanner: function () {
-                let villageThumbs = new Swiper('.village-thumbs', {
-                    observer: true,
-                    spaceBetween: 0,
-                    slidesPerView: 4,
-                    watchSlidesVisibility: true,//防止不可点击
-                });
+                // let villageThumbs = new Swiper('.village-thumbs', {
+                //     observer: true,
+                //     spaceBetween: 0,
+                //     slidesPerView: 4,
+                //     watchSlidesVisibility: true,//防止不可点击
+                // });
 
                 let villageBanner = new Swiper('.village-banner', {
                     observer: true,
@@ -172,9 +175,9 @@
                         nextEl: '.swiper-button-next',
                         prevEl: '.swiper-button-prev',
                     },
-                    thumbs: {
-                        swiper: villageThumbs,
-                    }
+                    // thumbs: {
+                    //     swiper: villageThumbs,
+                    // }
                 });
 
             },

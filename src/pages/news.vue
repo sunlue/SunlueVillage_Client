@@ -2,7 +2,9 @@
   <div id="news">
     <publicHead :show="show" :rightBtn="true"/>
     <section class="public-banner">
-      <img class="banner-img" src="../../static/images/newsBanner.jpg" alt="">
+      <img class="banner-img" src="../../static/images/newsBanner.jpg" alt="" v-if="newsClassify===0">
+      <img class="banner-img" src="../../static/images/newsBanner1.jpg" alt="" v-if="newsClassify===1">
+      <img class="banner-img" src="../../static/images/newsBanner2.jpg" alt="" v-if="newsClassify===2">
     </section>
     <section class="news-box">
       <div class="list-box" v-for="(item,index) in newsArr">
@@ -30,14 +32,16 @@
           </a>
         </div>
       </div>
+
+      <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
+                    v-model="currentPage"
+                    :total-rows="rows"
+                    :per-page="perPage"
+                    @input="getNewsData"
+      ></b-pagination>
     </section>
 
-    <b-pagination v-if="rows/perPage>1" hide-goto-end-buttons use-router align="center"
-                  v-model="currentPage"
-                  :total-rows="rows"
-                  :per-page="perPage"
-                  @input="getNewsData"
-    ></b-pagination>
+
 
 
     <publicFooter/>
@@ -57,7 +61,8 @@
             return {
                 show: 31,//当前栏目
                 newsArr: [],
-                newsType:"ARTICLE-TYPE-5DD3A76B30129",
+                newsClassify:this.$route.query.type?parseInt(this.$route.query.type):0,
+                newsType:["ARTICLE-TYPE-5DD3A76B30129","ARTICLE-TYPE-5DE4C47C31494","ARTICLE-TYPE-5DE5DA385A602"],
                 rows: '',
                 currentPage: 1,
                 perPage: 10,
@@ -76,7 +81,7 @@
                 let perPage = this.perPage;
                 axios.get(apiUrl, {
                     params: {
-                        type: this.newsType,
+                        type: this.newsType[this.newsClassify],
                         page: this.currentPage,
                         limit: perPage,
                     }

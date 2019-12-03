@@ -63,7 +63,7 @@
 	<!-- save the url path of this xml file (the url value will be adjusted during xml parsing) -->
 	<vtourskinxmlpath url="./" />
 
-	<!-- iPhone X safe-area support: use the horizontal safe-area only -->	
+	<!-- iPhone X safe-area support: use the horizontal safe-area only -->
 	<display safearea="h-only" />
 
 	<!-- mouse / touch / keyboard(button) control settings - https://krpano.com/docu/xml/#control -->
@@ -90,7 +90,7 @@
 	         dragging="move"
 	         moving="move"
 	         />
-             
+
 
 
 
@@ -150,7 +150,7 @@
 
 		set(layer[skin_layer].visible, true);
 	</action>
-	
+
 
 	<action name="skin_load_maps_plugin">
 		if (!layer[skin_map].url,
@@ -211,17 +211,17 @@
 					linkedscene=get(scene[get(i)].name),
 					onclick='copy(layer[skin_thumbborder].parent, name); skin_loadscene(get(linkedscene),get(skin_settings.loadscene_blend));'
 				);
-				
-				set(scene[get(i)], 
+
+				set(scene[get(i)],
 					thumbx=calc(thumbpadding + i*thumbxoffset + thumbxcenter),
 					thumby=get(thumbpadding)
 				);
-				
+
 				if(skin_settings.tooltips_thumbs,
 					set(layer[get(thumbname)].tooltip, get(scene[get(i)].title) );
 					layer[get(thumbname)].loadstyle(skin_tooltips);
 				);
-				
+
 			 );
 
 			if(scene.count == 1,
@@ -276,8 +276,8 @@
 			);
 		);
 	</action>
-	
-	
+
+
 	<action name="skin_lookat" scope="local" args="h, v, fov">
 		if(webvr.isenabled,
 			<!-- adjust the VR prev/next hotspots for the view change -->
@@ -301,7 +301,7 @@
 		add(mh, layer[skin_scroll_layer].y_offset);
 		set(layer[skin_scroll_layer].y, get(mh));
 		if(display.safearea_inset, calc(layer[skin_btn_show].y, skin_settings.controlbar_height - skin_settings.controlbar_offset_closed - (display.safearea_inset.b LT 0 ? display.safearea_inset.b : 0)); );
-		skin_video_updateseekbarwidth();
+		<!-- skin_video_updateseekbarwidth(); -->
 		skin_arrange_buttons();
 	</action>
 
@@ -480,7 +480,7 @@
 			if(scene[get(xml.scene)].isvideopano AND plugin[video] !== null,
 				skin_video_addcontrols();
 			  ,
-				skin_video_removecontrols();
+				<!-- skin_video_removecontrols(); -->
 			);
 		);
 	</action>
@@ -568,7 +568,7 @@
 
 	<action name="skin_hideskin" scope="local" args="hidetimemode">
 		calc(hidetime, hidetimemode == 'instant' ? 0.0 : 0.5);
-		
+
 		callwith(layer[skin_scroll_window],   skin_calc_opened_closed() );
 		callwith(layer[skin_splitter_bottom], skin_calc_opened_closed() );
 		callwith(layer[skin_control_bar],     skin_calc_opened_closed() );
@@ -701,15 +701,15 @@
 
 
 	<!-- videopano support - https://krpano.com/plugins/videoplayer/ -->
-	
-	
 
 
-	
 
-	
-	
-	
+
+
+
+
+
+
 	<!-- autotour/autoplay support -->
 	<autorotate enabled="calc:skin_settings.autotour == true"
 	            waittime="1.0"
@@ -717,20 +717,20 @@
 	            speed="4.0"
 	            tofov="80"
 	            />
-	
+
 	<events name="skin_autotour" keep="true"
 		onautorotatestart="skin_autotour_start();"
 		onautorotatestop="skin_autotour_stop();"
 		onautorotateoneround="skin_nextscene_loop(+1);"
 		/>
-	
+
 	<action name="skin_autotour_start" scope="PRIVATE:skin_autotour">
 		copy(loadscene_flags_backup, global.skin_settings.loadscene_flags);
 		set(global.skin_settings.loadscene_flags, MERGE|KEEPVIEW|KEEPMOVING|PRELOAD);
 		copy(loadscene_blend_next_backup, global.skin_settings.loadscene_blend_next);
 		set(global.skin_settings.loadscene_blend_next, SLIDEBLEND(2.0, 0, 0.75, linear) );
 	</action>
-	
+
 	<action name="skin_autotour_stop" scope="PRIVATE:skin_autotour">
 		copy(global.skin_settings.loadscene_flags, loadscene_flags_backup);
 		copy(global.skin_settings.loadscene_blend_next, loadscene_blend_next_backup);
@@ -741,30 +741,30 @@
 	<contextmenu versioninfo="false" fullscreen="false">
 		<!-- <item name="kr" caption="KRPANO"     /> -->
         <item name="上略互动" caption="全案策划：上略互动"   />
-       
+
 		<!-- <item name="cc" caption="Change Controlmode" onclick="skin_changecontrolmode();"  separator="true" /> -->
         <item name="cc" caption="改变控制模式" onclick="skin_changecontrolmode();"  separator="true" />
-        
+
 		<!-- <item name="nv" caption="Normal View"        onclick="skin_view_normal();"        showif="view.vlookatrange == 180" separator="true"      /> -->
         <item name="nv" caption="标准视角"        onclick="skin_view_normal();"        showif="view.vlookatrange == 180" separator="true"      />
-        
+
 		<!-- <item name="fv" caption="Fisheye View"       onclick="skin_view_fisheye();"       showif="view.vlookatrange == 180" devices="flash|webgl" /> -->
         <item name="fv" caption="鱼眼视角"       onclick="skin_view_fisheye();"       showif="view.vlookatrange == 180" devices="flash|webgl" />
-        
+
 		<!-- <item name="sv" caption="Stereographic View" onclick="skin_view_stereographic();" showif="view.vlookatrange == 180" devices="flash|webgl" /> -->
         <item name="sv" caption="立体视角" onclick="skin_view_stereographic();" showif="view.vlookatrange == 180" devices="flash|webgl" />
-        
+
 		<!-- <item name="av" caption="Architectural View" onclick="skin_view_architectural();" showif="view.vlookatrange == 180"                       /> -->
         <item name="av" caption="建筑学视角" onclick="skin_view_architectural();" showif="view.vlookatrange == 180" />
-        
+
 		<!-- <item name="pv" caption="Pannini View"       onclick="skin_view_pannini();"       showif="view.vlookatrange == 180" devices="flash|webgl" /> -->
         <item name="pv" caption="帕尼尼视角"       onclick="skin_view_pannini();"       showif="view.vlookatrange == 180" devices="flash|webgl" />
-        
+
 		<!-- <item name="lp" caption="Little Planet View" onclick="skin_view_littleplanet();"  showif="view.vlookatrange == 180" devices="flash|webgl" /> -->
         <item name="lp" caption="小行星视角" onclick="skin_view_littleplanet();"  showif="view.vlookatrange == 180" devices="flash|webgl" />
-        
+
 		<item name="sa" caption="自动播放"     onclick="autorotate.start();" separator="both" showif="autorotate.isrotating == false" visible="calc:skin_settings.autotour == true" />
-        
+
 		<item name="ta" caption="暂停自动播放"      onclick="autorotate.stop();"  separator="both" showif="autorotate.isrotating == true"  visible="calc:skin_settings.autotour == true" />
 	</contextmenu>
 
@@ -828,8 +828,8 @@
 		tween(view.hlookat, calc(view.hlookat + 100.0 + 45.0*random), distance(100,0.8));
 		skin_deeplinking_update_url(1.0);
 	</action>
-	
-	
+
+
 	<action name="skin_followmouse_init" scope="private:skinfollowmouse" autorun="onstart" devices="desktop.and.no-touch">
 		if(global.skin_settings.followmousecontrol,
 			set(followspeed, 0.05);
@@ -844,7 +844,7 @@
 			set(global.events[skin_followmouse].onmouseup, scope(private:skinfollowmouse, delayedcall(followmouse_reenable, 1.0, tween(followfactor,1.0,3.0) ); ); );
 		  );
 	</action>
-	
+
 	<action name="skin_followmouse_onviewchange" scope="private:skinfollowmouse">
 		if(global.mouse.x != 0 AND global.mouse.y != 0,
 			Math.tan(zoomscale, calc(global.view.vfov * 0.5 * Math.PI / 180.0));
@@ -858,15 +858,15 @@
 			copy(global.view.rx, track_rx);
 		);
 	</action>
-	
-	
-	
+
+
+
 	<!-- A helper script for getting into fullscreen mode on the iPhone. -->
-	
+
 	<events name="iphone_fullscreen_swipe" keep="true" devices="iphone"
 			oniphonefullscreen="iphone_fullscreen_swipe();"
 			/>
-		
+
 	<action name="iphone_fullscreen_swipe" scope="localonly">
 		if(global.display.iphonefullscreen GT 0,
 			if(!global.layer[iphone_fullscreen_info],
@@ -882,6 +882,6 @@
 			removelayer('iphone_fullscreen_info');
 		);
 	</action>
-	
+
 
 </krpano>

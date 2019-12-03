@@ -8,7 +8,7 @@
       <div class="content-box">
         <div class="container-fluid">
 
-          <div class="culture list-jump">
+          <div class="culture list-jump" v-show="!sceneryArr.length<1">
             <p class="title">风景名胜</p>
             <div class="swiper-container team-swiper" :style="{height:sceneryArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
@@ -30,8 +30,9 @@
               <div class="swiper-button-prev team-prev"></div>
               <div class="swiper-button-next team-next"></div>
             </div>
+            <p v-if="sceneryArr.length<1">资料整理中...</p>
           </div>
-          <div class="history list-jump">
+          <div class="history list-jump" v-show="!specialtyArr.length<1">
             <p class="title">特色物产</p>
             <div class="swiper-container specialty-swiper" :style="{height:specialtyArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
@@ -53,14 +54,18 @@
               <div class="swiper-button-prev specialty-prev"></div>
               <div class="swiper-button-next specialty-next"></div>
             </div>
+            <p v-if="specialtyArr.length<1">资料整理中...</p>
+          </div>
+          <div class="text-center" v-if="sceneryArr.length<1&&specialtyArr.length<1">
+            <img src="../../static/images/defaultImg.png" alt="">
           </div>
         </div>
       </div>
     </section>
 
     <div class="right-anchor">
-      <p class="list" :class="{'active':showItem==0}" @click="goLocation(0)">风景名胜</p>
-      <p class="list" :class="{'active':showItem==1}" @click="goLocation(1)">特色物产</p>
+      <p class="list" v-show="!sceneryArr.length<1" :class="{'active':showItem==0}" @click="goLocation(0)">风景名胜</p>
+      <p class="list" v-show="!specialtyArr.length<1" :class="{'active':showItem==1}" @click="goLocation(1)">特色物产</p>
       <p class="list" @click="returnTop">返回顶部</p>
     </div>
     <publicFooter/>
@@ -155,11 +160,13 @@
                 let el = document.querySelectorAll(".list-jump");
                 el.forEach((item, index) => {
                     let elTop = item.offsetTop;
-                    let height = item.clientHeight;
-                    if (windowTop > elTop - height) {
-                        this.showItem = index
+                    let height = window.innerHeight;
+                    if(elTop>0){
+                        if (windowTop > elTop - height) {
+                            this.showItem = index;
+                        }
                     }
-                })
+                });
             },
             // 回到顶部
             returnTop() {

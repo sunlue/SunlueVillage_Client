@@ -24,12 +24,12 @@
         </a>
       </div>
 
-      <div class="hot-list-box">
-        <a href="/village" class="hot-name">热门</a>
-        <a class="hot-list" v-for="item in hot" :href="'/village-home?vid='+item.uniqid">
-          {{ item.name }}
-        </a>
-      </div>
+<!--      <div class="hot-list-box">-->
+<!--        <a href="/village" class="hot-name">热门</a>-->
+<!--        <a class="hot-list" v-for="item in hot" :href="'/village-home?vid='+item.uniqid">-->
+<!--          {{ item.name }}-->
+<!--        </a>-->
+<!--      </div>-->
 
       <ul class="list-inline classify-box">
         <li v-for="(item,index) in classify" class="list-inline-item classify-list" :key="index"
@@ -63,13 +63,13 @@
                 </a>
               </div>
               <div class="text-box">
-                <p class="clearfix">
+                <p class="clearfix" style="margin-bottom: 0.4rem">
                   <a :href="'village-home?vid='+item.uniqid">
                     <span class="name">{{item.name}}</span>
                   </a>
                   <span class="address">{{item.town_text}}</span>
                 </p>
-                <p class="type-box">
+                <p class="type-box" style="margin-bottom: 1.4rem">
                   <span class="type" v-for="list in item.type">
                     {{list}}
                   </span>

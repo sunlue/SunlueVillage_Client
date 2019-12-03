@@ -52,7 +52,7 @@
                   <td>{{intro.industry}}</td>
                 </tr>
                 <tr>
-                  <th colspan="6">简介</th>
+                  <th colspan="6" class="text-center">简介</th>
                 </tr>
                 <tr>
                   <td colspan="6" v-html="intro.content"></td>
@@ -60,7 +60,7 @@
               </table>
             </div>
           </div>
-          <div class="culture list-jump">
+          <div class="culture list-jump" v-show="!culturalArr.length<1">
             <p class="title">文物古迹</p>
             <div class="swiper-container specialty-swiper" :style="{height:culturalArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
@@ -82,11 +82,11 @@
               <div class="swiper-button-prev specialty-prev"></div>
               <div class="swiper-button-next specialty-next"></div>
             </div>
-
+<!--            <p v-if="!culturalArr.length<1">资料整理中...</p>-->
           </div>
-          <div class="history list-jump">
+          <div class="history list-jump" v-show="naturalArr.annual_mean_temperature">
             <p class="title">自然环境</p>
-            <div>
+            <div v-if="naturalArr.annual_mean_temperature">
               <table class="table table-bordered">
                 <tr>
                   <th>年平均温度</th>
@@ -112,6 +112,7 @@
 
               </table>
             </div>
+<!--            <p v-if="!naturalArr.annual_mean_temperature">资料整理中...</p>-->
           </div>
         </div>
       </div>
@@ -119,8 +120,8 @@
 
     <div class="right-anchor">
       <p class="list" :class="{'active':showItem==0}" @click="goLocation(0)">村落概况</p>
-      <p class="list" :class="{'active':showItem==1}" @click="goLocation(1)">文物古迹</p>
-      <p class="list" :class="{'active':showItem==2}" @click="goLocation(2)">自然环境</p>
+      <p class="list" v-show="!culturalArr.length<1" :class="{'active':showItem==1}" @click="goLocation(1)">文物古迹</p>
+      <p class="list" v-show="naturalArr.annual_mean_temperature" :class="{'active':showItem==2}" @click="goLocation(2)">自然环境</p>
       <p class="list" @click="returnTop">返回顶部</p>
     </div>
     <publicFooter/>
@@ -143,6 +144,7 @@
             this.getNatural();
             this.getCultural();
             this.getBanner();
+
             window.addEventListener('scroll', this.setAnchor);
         },
         destroyed() { //页面离开后销毁，防止切换路由后上一个页面监听scroll滚动事件会在新页面报错问题
@@ -171,7 +173,6 @@
                 }).then((res) => {
                     if (res.data.code === 200) {
                         this.intro = res.data.data;
-                        console.log(this.intro)
                     }
                 })
             },
@@ -221,9 +222,11 @@
                 let el = document.querySelectorAll(".list-jump");
                 el.forEach((item, index) => {
                     let elTop = item.offsetTop;
-                    let height = item.clientHeight
-                    if (windowTop > elTop - height) {
-                        this.showItem = index
+                    let height = window.innerHeight;
+                    if(elTop>0){
+                        if (windowTop > elTop - height) {
+                            this.showItem = index;
+                        }
                     }
                 })
             },
@@ -240,7 +243,8 @@
             },
             //去指定位置
             goLocation(i) {
-                document.documentElement.scrollTop = document.querySelectorAll(".list-jump")[i].offsetTop;
+                // document.documentElement.scrollTop = document.querySelectorAll(".list-jump")[i].offsetTop;
+                return false;
             },
             // 初始化swiper
             initSwiper() {
@@ -281,6 +285,7 @@
   }
 
   #village-culture table td {
+    background: #fff;
     color: #666;
   }
 

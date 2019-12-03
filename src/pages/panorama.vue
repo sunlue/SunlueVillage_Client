@@ -32,7 +32,7 @@
             <div class="box">
               <a :href="item.tour" :target="item.blank">
                 <div class="img-box">
-                  <img :src="$config.apiUrl + item.thumbnail" alt="" :title="item.name">
+                  <img :src="$config.apiUrl + item.tour_img" alt="" :title="item.name">
                 </div>
               </a>
 
@@ -91,7 +91,7 @@
                 currentPage: 1,
                 rows: '',
                 townId: "510703000000",
-                perPage: 12,
+                perPage: 10,
                 cityData: [{"label": "全部", "value": 0}],
                 classify: [],
                 villageCId: this.$route.query.cid,
@@ -172,7 +172,8 @@
             },
             // 选择特色分类
             setClassify: function (index) {
-                this.classifyOption = []
+                this.currentPage = 1;
+                this.classifyOption = [];
                 this.classify[index].checked = !this.classify[index].checked;
                 this.classify.forEach((value, index) => {
                     if (value.checked) {
@@ -212,6 +213,7 @@
 
             //更新数据
             changeData() {
+                this.currentPage = 1;
                 this.getHotVillage()
             },
             //数组对象排序

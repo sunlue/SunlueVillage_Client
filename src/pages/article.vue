@@ -189,4 +189,7 @@
   #article-page .content-box img {
     max-width: 100%;
   }
+  .bd_weixin_popup{
+    height: 310px !important;
+  }
 </style>

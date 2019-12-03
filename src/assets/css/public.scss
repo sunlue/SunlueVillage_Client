@@ -5,6 +5,21 @@ html, body {
   margin: auto;
 }
 
+@keyframes star {
+  from {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0.1;
+    transform: scale(0.5);
+  }
+}
+
 a {
   &:hover {
     text-decoration: none;
@@ -15,10 +30,12 @@ a {
   stroke: #fff;
   fill: #fff;
 }
+
 .broadside-box-center path {
   stroke: #37d09f;
   fill: #37d09f;
 }
+
 .head-box {
   position: absolute;
   z-index: 3;
@@ -103,13 +120,14 @@ a {
         margin: 0;
         line-height: 106px;
 
-        &.active{
+        &.active {
           background: #37cf9f;
 
-          a{
+          a {
             color: #fff;
           }
         }
+
         a {
           color: #333;
           display: block;
@@ -191,9 +209,10 @@ footer {
 .broadside-box {
   position: fixed;
   right: 0;
-  bottom: 60px;
-  width: 88px;
-  background-color: rgba(0, 0, 0, 0.24);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 78px;
+  //background-color: rgba(0, 0, 0, 0.24);
   border-radius: 8px 0 0 8px;
   transition: .3s;
   z-index: 3;
@@ -209,6 +228,7 @@ footer {
     text-align: center;
     width: 100%;
     margin: 22px 0;
+    cursor: pointer;
 
     .list-icon {
       display: block;
@@ -220,8 +240,14 @@ footer {
       transform: scale(1.5);
     }
 
+    &:last-child {
+      .list-icon {
+        transform: scale(1.9);
+      }
+    }
+
     .list-text {
-      font-size: 16px;
+      font-size: 14px;
       color: #fff;
       transition: .3s;
     }
@@ -269,6 +295,12 @@ footer {
     font-size: 18px;
     color: $mainColor;
 
+    &:hover {
+      &::before, &::after {
+        animation: 2s star infinite;
+      }
+    }
+
     &::before {
       position: absolute;
       content: '';
@@ -294,9 +326,14 @@ footer {
   }
 
   .hot-list {
-    height: 372px;
+    height: 350px;
     margin-bottom: 24px;
     position: relative;
+    transition: .1s;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
 
     .box {
       display: block;
@@ -310,7 +347,7 @@ footer {
 
     .img-box {
       width: 100%;
-      height: 254px;
+      height: 230px;
       overflow: hidden;
 
       img {
@@ -483,7 +520,7 @@ footer {
   .page-item {
     margin: 0 2px;
 
-    &.active{
+    &.active {
       .page-link {
         color: #fff;
         background: #37cf9f;
@@ -496,7 +533,7 @@ footer {
       color: #ccc;
       font-size: 20px;
 
-      &:focus{
+      &:focus {
         box-shadow: none;
       }
 
@@ -640,7 +677,7 @@ footer {
     }
   }
 
-  .public-banner{
-      height: 200px;
+  .public-banner {
+    height: 200px;
   }
 }

@@ -8,13 +8,14 @@
       <div class="content-box">
         <div class="container-fluid">
 
-          <div class="history list-jump">
-            <p class="title">党支部</p>
+          <div class="history list-jump" v-show="teamArr.content">
+            <p class="title">党组织</p>
             <div v-html="teamArr.content">
             </div>
+            <p v-if="!teamArr.content">资料整理中...</p>
           </div>
 
-          <div class="history list-jump">
+          <div class="history list-jump" v-show="!doubleArr.length<1">
             <p class="title">两新组织</p>
             <div class="swiper-container team-swiper" :style="{height:doubleArr.length>3?'':'auto'}">
               <div class="swiper-wrapper">
@@ -36,14 +37,19 @@
               <div class="swiper-button-prev team-prev"></div>
               <div class="swiper-button-next team-next"></div>
             </div>
+            <p v-if="doubleArr.length<1">资料整理中...</p>
+          </div>
+
+          <div class="text-center" v-if="!teamArr.content&&doubleArr.length<1">
+            <img src="../../static/images/defaultImg.png" alt="">
           </div>
         </div>
       </div>
     </section>
 
     <div class="right-anchor">
-      <p class="list" :class="{'active':showItem==0}" @click="goLocation(0)">党支部</p>
-      <p class="list" :class="{'active':showItem==1}" @click="goLocation(1)">两新组织</p>
+      <p class="list" :class="{'active':showItem==0}" v-show="teamArr.content" @click="goLocation(0)">党支部</p>
+      <p class="list" :class="{'active':showItem==1}" v-show="!doubleArr.length<1" @click="goLocation(1)">两新组织</p>
       <p class="list" @click="returnTop">返回顶部</p>
     </div>
     <publicFooter/>
@@ -142,11 +148,13 @@
                 let el = document.querySelectorAll(".list-jump");
                 el.forEach((item, index) => {
                     let elTop = item.offsetTop;
-                    let height = item.clientHeight;
-                    if (windowTop > elTop - height) {
-                        this.showItem = index
+                    let height = window.innerHeight;
+                    if(elTop>0){
+                        if (windowTop > elTop - height) {
+                            this.showItem = index;
+                        }
                     }
-                })
+                });
             },
             // 回到顶部
             returnTop() {

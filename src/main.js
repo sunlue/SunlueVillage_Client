@@ -9,6 +9,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import './assets/css/public.css'
 import config from './config'
 import myfunction from './assets/js/public'
+import 'animate.css'
 
 Vue.use(BootstrapVue)
 

@@ -36,11 +36,30 @@
       .img-box {
         width: 100%;
         height: 100%;
+        position: relative;
 
         img {
           height: 100%;
           width: 100%;
           object-fit: cover;
+        }
+
+        &::after{
+          position: absolute;
+          content: '';
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.4);
+          left: 0;
+          top: 0;
+        }
+      }
+
+      &.swiper-slide-thumb-active{
+        .img-box{
+          &::after{
+            display: none;
+          }
         }
       }
     }
@@ -53,6 +72,10 @@
   bottom: 0;
   width: 80px;
   height: 95px;
+
+  &:hover{
+    background-color: #37cf9f;
+  }
 
   &:after {
     content: '';
@@ -68,7 +91,6 @@
   bottom: 0;
   width: 80px;
   height: 95px;
-  background-color: #37cf9f;
 
   &:after {
     content: '';
@@ -76,12 +98,16 @@
     height: 100%;
     background: url(../../../static/images/nextBtn.png) center no-repeat;
   }
+
+  &:hover{
+    background-color: #37cf9f;
+  }
 }
 
 .content-box {
   position: absolute;
   z-index: 2;
-  width: 700px;
+  width: 640px;
   left: 0;
   top: 140px;
   transition: .5s;
@@ -111,15 +137,15 @@
   }
 
   .icon-box {
-    width: 100px;
+    width: 80px;
     float: left;
-    height: 350px;
+    height: 324px;
     background-color: #f1f1f1;
     z-index: 3;
     position: relative;
 
     .icon-list {
-      height: 116px;
+      height: 108px;
       margin: 0;
       position: relative;
       cursor: pointer;
@@ -146,15 +172,15 @@
         display: inline-block;
         width: 100%;
         height: 37px;
-        margin-top: 30px;
-        transform: scale(1.25);
+        margin-top: 24px;
+        //transform: scale(1.25);
       }
 
       .text {
         display: inline-block;
         width: 100%;
         color: #333;
-        font-size: 18px;
+        font-size: 14px;
         text-align: center;
         line-height: 1em;
       }
@@ -162,8 +188,8 @@
   }
 
   .details-box {
-    width: 600px;
-    height: 350px;
+    width: 560px;
+    height: 324px;
     background: url(../../../static/images/villageContentBg.jpg) right top no-repeat;
     float: left;
     padding: 45px 38px 0 48px;
@@ -172,7 +198,7 @@
     z-index: 1;
 
     .name {
-      font-size: 56px;
+      font-size: 40px;
       color: #333333;
       line-height: 1em;
     }
@@ -241,6 +267,7 @@
   top: 0;
   left: 0;
   z-index: 2;
+  background: #ccc;
 
   .panorama-close{
     position: absolute;
@@ -273,6 +300,14 @@
       transform-origin: center;
       top: 15px;
     }
+  }
+
+  .tips{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    font-size: 20px;
   }
 }
 

@@ -10,12 +10,39 @@
             </div>
           </div>
         </div>
+        <div class="swiper-pagination information-pagination"></div>
       </div>
-      <div class="swiper-pagination information-pagination"></div>
+
+      <div class="information-btn-box">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-3 btn-list">
+              <a href="/news" class="btn-link">
+                新闻动态
+              </a>
+            </div>
+            <div class="col-3 btn-list">
+              <a href="/action" class="btn-link">
+                特色活动
+              </a>
+            </div>
+            <div class="col-3 btn-list">
+              <a href="/news?type=1" class="btn-link">
+                农情快递
+              </a>
+            </div>
+            <div class="col-3 btn-list">
+              <a href="/news?type=2" class="btn-link">
+                问答
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
     <section class="information-news-box">
-      <p class="news-title"><img src="../../static/images/informationTitle.png" alt=""></p>
+<!--      <p class="news-title"><img src="../../static/images/informationTitle.png" alt=""></p>-->
 
       <div class="container">
         <div class="row flex-row-reverse">
@@ -55,9 +82,8 @@
             </div>
           </div>
         </div>
-        <a class="newsMore" href="/news">查看更多</a>
 
-        <p class="news-title action-title"><img src="../../static/images/activity.png" alt=""></p>
+<!--        <p class="news-title action-title"><img src="../../static/images/activity.png" alt=""></p>-->
         <div class="row home-infomation">
           <div class="col-lg-4 col-sm-6 home-infomation-list" v-for="(list,index) in infomationList">
             <div class="img-box">
@@ -68,7 +94,6 @@
           </div>
         </div>
 
-        <a class="actionMore" href="/action">查看更多</a>
       </div>
     </section>
     <publicFooter/>
@@ -103,7 +128,7 @@
         },
         mounted() {
             this.getBanner();
-            this.initNewsSwiper();
+            // this.initNewsSwiper();
             // this.getTopNews();
             this.getNews();
             this.getTopNews();
@@ -224,7 +249,7 @@
                     speed: 800,
                     spaceBetween: 0,
                     centeredSlides: true,
-                    slidesPerView: 1.3,
+                    slidesPerView: 1,
                     watchSlidesProgress: true,
                     initialSlide: 1,
                     loop: true,
@@ -267,7 +292,7 @@
                     on: {
                         slideChange: function () {
                             let index = this.realIndex;
-                            self.activeNews = self.newsList[index].name;
+                            self.activeNews = self.newsRecommendedList[index].title;
                         }
                     },
                 })
@@ -309,6 +334,7 @@
   .information-pagination .swiper-pagination-bullet-active {
     width: 44px;
     background-color: #37cf9f;
+    opacity: 1;
   }
 
   .information-news-box #newsSwiper .swiper-pagination .swiper-pagination-bullet {

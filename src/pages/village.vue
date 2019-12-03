@@ -2,8 +2,12 @@
   <div class="village" :class="{'inside-box':show != 1}">
     <publicHead :show="show" :rightBtn="true"/>
     <div class="village-box">
-      <p class="village-banner">
-        <img class="img-fluid" src="../../static/images/villageBanner.jpg" alt="">
+      <p v-if="showAD" class="village-banner">
+        <a :href="item.link?item.link:'javascript:void(0)'" v-for="(item,index) in banner" v-if="index<1">
+          <img class="img-fluid" :src="$config.apiUrl + item.image" alt="">
+        </a>
+        <span class="close-btn" @click="showAD = false">
+        </span>
       </p>
 
       <div class="village-classify">
@@ -105,8 +109,11 @@
             return {
                 show: 2,
                 mobile: false,
+                showAD:true,
                 currentPage: 1,
+                banner:[],
                 rows: '',
+                navType:"NAV-5DDA3A711C040",
                 townId:"510703000000",
                 perPage: 12,
                 cityData: [{"label": "全部", "value": 0}],
@@ -125,11 +132,26 @@
                 this.mobile = window.innerWidth < 992;
             };
             this.getCityData();
+            this.getBanner();
             // this.getHotVillage();
             this.getHotRecommend();
             this.getVillageClassify();
         },
         methods: {
+            // 获取banner
+            getBanner() {
+                let apiUrl = this.$config.apiUrl + 'portal/slide/read';
+                axios.get(apiUrl, {
+                    params: {
+                        nav: this.navType
+                    }
+                }).then((res)=>{
+                    if (res.data.code === 200) {
+                        this.banner = res.data.data;
+                        console.log(this.banner)
+                    }
+                })
+            },
             // 点赞
             setLike: function (data, uniqid) {
                 for (let i = 0; i < data.length; i++) {
@@ -192,7 +214,8 @@
             },
             // 选择特色分类
             setClassify: function (index) {
-                this.classifyOption = []
+                this.currentPage = 1;
+                this.classifyOption = [];
                 this.classify[index].checked = !this.classify[index].checked;
                 this.classify.forEach((value,index)=>{
                     if(value.checked){
@@ -223,6 +246,7 @@
 
             //更新数据
             changeData() {
+                this.currentPage = 1;
                 this.getHotVillage()
             },
             // 获取热门推荐内容

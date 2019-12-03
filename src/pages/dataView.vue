@@ -3,9 +3,9 @@
     <iframe width="100%" height="100%" :src="iframeArr[iframeArrIndex]">
     </iframe>
     <div class="iframe-box-bg"></div>
-    <div class="banner-text">
-      数字乡村
-    </div>
+<!--    <div class="banner-text">-->
+<!--      数字乡村-->
+<!--    </div>-->
   </div>
 </template>
 <script>

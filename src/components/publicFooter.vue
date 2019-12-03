@@ -1,7 +1,7 @@
 <template>
   <footer>
-    © 涪城区数字乡村信息管理平台 All rights reserved by:<a target="_blank" href="http://www.sunlue.com">上略互动网络技术有限公司</a> | {{webInfo.icp_copyright}} | 备案信息:
-    {{webInfo.police_copyright}}
+    Copyright © 涪城区数字乡村信息管理平台 All Rights Reserved.Powered by<a target="_blank" href="http://www.sunlue.com">上略互动</a> | {{questionArr.icp_copyright}} |
+    {{questionArr.police_copyright}}
   </footer>
 </template>
 
@@ -12,7 +12,8 @@
         data() {
             return {
                 webInfo: {},
-                type: "setting"
+                type: "setting",
+                questionArr:[]
             }
         },
         mounted: function () {
