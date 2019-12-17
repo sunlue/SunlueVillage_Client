@@ -1,6 +1,6 @@
 <template>
   <footer>
-    Copyright © 涪城区数字乡村信息管理平台 All Rights Reserved.Powered by<a target="_blank" href="http://www.sunlue.com">上略互动</a> | {{questionArr.icp_copyright}} |
+    Copyright © 数字乡村公共服务平台 All Rights Reserved.Powered by<a target="_blank" href="http://www.sunlue.com">上略互动</a> | {{questionArr.icp_copyright}} |
     {{questionArr.police_copyright}}
   </footer>
 </template>

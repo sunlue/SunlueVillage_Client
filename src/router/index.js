@@ -12,6 +12,7 @@ import consult from '@/pages/consult'
 import panorama from '@/pages/panorama'
 import article from '@/pages/article'
 import serve from '@/pages/serve'
+import cultivate from '@/pages/cultivate'
 import serveList from '@/pages/serve-list'
 import dataView from '@/pages/dataView'
 import villageHome from '@/village/home'
@@ -79,6 +80,11 @@ export default new Router({
       path: '/serve',
       name: '服务',
       component: serve
+    },
+    {
+      path: '/cultivate',
+      name: '双创培训',
+      component: cultivate
     },
     {
       path: '/serve-list',

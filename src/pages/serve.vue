@@ -116,7 +116,8 @@
 
     <section class="container-fluid sever-block-box">
       <div class="row">
-        <div class="col-lg-3 sever-block-list wow fadeInUp" v-if="index<=3" :data-wow-delay="index%2===0?'0':'0.3s'" v-for="(item,index) in serveArr" @click="jumpLink(index)">
+        <div class="col-lg-3 sever-block-list wow" :class="{'fadeInLeft':!mobile}" v-if="index<=3"
+             :data-wow-delay="index%2===0?'0':'0.5s'" v-for="(item,index) in serveArr" @click="jumpLink(index)">
           <div class="img-box">
             <img :src="item.img" alt="" :title="item.name">
           </div>
@@ -125,7 +126,8 @@
             <p class="intro">{{item.intro}}</p>
           </div>
         </div>
-        <div class="col-lg-3 sever-block-list wow fadeInUp" v-if="index>3" :data-wow-delay="index%2===0?'0.3s':'0'" v-for="(item,index) in serveArr" @click="jumpLink(index)">
+        <div class="col-lg-3 sever-block-list wow" :class="{'fadeInRight':!mobile}" v-if="index>3"
+             :data-wow-delay="index%2===0?'0.5s':'0'" v-for="(item,index) in serveArr" @click="jumpLink(index)">
           <div class="img-box">
             <img :src="item.img" alt="" :title="item.name">
           </div>
@@ -289,6 +291,7 @@
       return {
         show: 4,
         listType: "ARTICLE-TYPE-5DDA3FF9C6531",
+        mobile: false,
         serve: [],
         dataList: [],
         hotList: [],
@@ -314,7 +317,8 @@
             name: "双创培训",
             intro: "课程教学  专家咨询  政企合作  产销对接 综合农业教育服务平台",
             img: "../../static/images/serveList4.jpg",
-            link: "http://xue.yszn.net.cn/"
+            // link: "http://xue.yszn.net.cn/"
+            link: "/cultivate"
           }, {
             name: "产品质量安全追溯",
             intro: "查询追溯码  政策法规  行业资讯  绿色食品  有机农产品 地理标志农产品",
@@ -343,6 +347,10 @@
       this.getRecommend();
       this.getHot();
       this.getTopNews();
+      this.mobile = window.innerWidth < 992;
+      window.onresize = () => {
+        this.mobile = window.innerWidth < 992;
+      };
       this.$nextTick(() => { // 在dom渲染完后,再执行动画
         let wow = new WOW({
           live: false
@@ -445,7 +453,11 @@
       },
       // 跳转链接
       jumpLink(index) {
-        index >= 7 ? this.showModal() : window.open(this.serveArr[index].link);
+        if (index === 3) {
+          window.location.href = this.serveArr[index].link;
+        } else {
+          index >= 7 ? this.showModal() : window.open(this.serveArr[index].link);
+        }
       },
       // 初始化新闻动态swiper
       initNewsSwiper() {
@@ -472,14 +484,14 @@
     },
     filters: {
       formatDateYM: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let y = date.getFullYear();
         let MM = date.getMonth() + 1;
         MM = MM < 10 ? ('0' + MM) : MM;
         return y + '-' + MM;
       },
       formatDateMD: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let MM = date.getMonth() + 1;
         MM = MM < 10 ? ('0' + MM) : MM;
         let d = date.getDate();
@@ -487,13 +499,13 @@
         return MM + '-' + d;
       },
       formatDateD: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
         return d;
       },
       formatDateYMD: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let y = date.getFullYear();
         let MM = date.getMonth() + 1;
         MM = MM < 10 ? ('0' + MM) : MM;

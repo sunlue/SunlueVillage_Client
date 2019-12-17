@@ -1,6 +1,6 @@
 $mainColor: #37cf9f;
 .village {
-  background-color: #fafafa;
+  //background-color: #fafafa;
 }
 
 .village-box {
@@ -243,6 +243,16 @@ $mainColor: #37cf9f;
 
     .village-banner {
       margin-bottom: 15px;
+      height: 200px;
+      img{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    .close-btn{
+      display: none;
     }
 
     .village-classify {
@@ -344,6 +354,20 @@ $mainColor: #37cf9f;
           height: 140px;
         }
       }
+    }
+  }
+
+  .serve-banner-box{
+    height: 160px;
+
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .title{
+      font-size: 26px !important;
     }
   }
 }

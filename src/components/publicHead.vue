@@ -62,12 +62,42 @@
       </div>
       <div class="mobile-btn" :class="{'close-btn':closeBtn}" @click="closeBtn = !closeBtn"></div>
       <ul class="mobile-nav clearfix" :class="{'mobile-nav-show':closeBtn}">
-        <li><p><a href="/">首页</a></p></li>
-        <li><p><a href="/village">村落</a></p></li>
-        <li><p><a href="/information-home">资讯</a></p></li>
-        <li><p><a href="/serve">服务</a></p></li>
-        <li><p><a href="/panorama">720°全景</a></p></li>
-        <li><p><a href="/consult">咨询</a></p></li>
+        <li>
+          <a href="/">
+            <div class="icon"></div>
+            <p class="text">首页</p>
+          </a>
+        </li>
+        <li>
+          <a href="/village">
+            <div class="icon"></div>
+            <p class="text">村落</p>
+          </a>
+        </li>
+        <li>
+          <a href="/information-home">
+            <div class="icon"></div>
+            <p class="text">资讯</p>
+          </a>
+        </li>
+        <li>
+          <a href="/serve">
+            <div class="icon"></div>
+            <p class="text">服务</p>
+          </a>
+        </li>
+        <li>
+          <a href="/panorama">
+            <div class="icon"></div>
+            <p class="text">720°全景</p>
+          </a>
+        </li>
+        <li>
+          <a href="/consult">
+            <div class="icon"></div>
+            <p class="text">咨询</p>
+          </a>
+        </li>
       </ul>
     </div>
 

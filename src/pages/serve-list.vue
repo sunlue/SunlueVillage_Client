@@ -52,81 +52,81 @@
   </div>
 </template>
 <script>
-    import publicHead from "../components/publicHead"
-    import publicFooter from "../components/publicFooter"
-    import axios from "axios"
+  import publicHead from "../components/publicHead"
+  import publicFooter from "../components/publicFooter"
+  import axios from "axios"
 
-    export default {
-        components: {
-            publicHead,
-            publicFooter
-        },
-        data() {
-            return {
-                show: 4,
-                totalPage: 10,
-                tabId: this.$route.query.id ? parseInt(this.$route.query.id) : 1,
-                serveData: [],
-                serveType: "",
-                typeArr: [
-                    "ARTICLE-TYPE-5DDA7F2529C4A",
-                    "ARTICLE-TYPE-5DDA7F2BCC860",
-                    "ARTICLE-TYPE-5DDA7F3625498",
-                    "ARTICLE-TYPE-5DDA7F3ACCE5E",
-                    "ARTICLE-TYPE-5DDA7F48363E0",
-                    "ARTICLE-TYPE-5DDA7F54399A8"
-                ],
-                rows: '',
-                currentPage: 1,
-                perPage: 10
-            }
-        },
-        mounted() {
-            this.serveType = this.typeArr[this.tabId - 1];
-            this.getServeData();
-        },
-        methods: {
-            // 获取指定服务类型数据
-            getServeData: function () {
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
-                axios.get(apiUrl, {
-                    params: {
-                        type: this.serveType,
-                        page: this.currentPage,
-                        limit: this.perPage,
-                    }
-                }).then((res) => {
-                    if (res.data.code === 200) {
-                        let resData = res.data.data;
-                        this.rows = resData.total;
-                        this.serveData = resData.data;
-                    }
-                })
-            },
-            // 切换栏目
-            changeNav(id) {
-                this.tabId = id;
-                this.currentPage = 1;
-                this.serveType = this.typeArr[id - 1];
-                this.getServeData();
-            }
-        },
-        filters: {
-            formatDateYM: function (value) {
-                let date = new Date(value);
-                let y = date.getFullYear();
-                let MM = date.getMonth() + 1;
-                MM = MM < 10 ? ('0' + MM) : MM;
-                return y + '-' + MM;
-            },
-            formatDateD: function (value) {
-                let date = new Date(value);
-                let d = date.getDate();
-                d = d < 10 ? ('0' + d) : d;
-                return d;
-            }
-        }
+  export default {
+    components: {
+      publicHead,
+      publicFooter
+    },
+    data() {
+      return {
+        show: 4,
+        totalPage: 10,
+        tabId: this.$route.query.id ? parseInt(this.$route.query.id) : 1,
+        serveData: [],
+        serveType: "",
+        typeArr: [
+          "ARTICLE-TYPE-5DDA7F2529C4A",
+          "ARTICLE-TYPE-5DDA7F2BCC860",
+          "ARTICLE-TYPE-5DDA7F3625498",
+          "ARTICLE-TYPE-5DDA7F3ACCE5E",
+          "ARTICLE-TYPE-5DDA7F48363E0",
+          "ARTICLE-TYPE-5DDA7F54399A8"
+        ],
+        rows: '',
+        currentPage: 1,
+        perPage: 10
+      }
+    },
+    mounted() {
+      this.serveType = this.typeArr[this.tabId - 1];
+      this.getServeData();
+    },
+    methods: {
+      // 获取指定服务类型数据
+      getServeData: function () {
+        let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+        axios.get(apiUrl, {
+          params: {
+            type: this.serveType,
+            page: this.currentPage,
+            limit: this.perPage,
+          }
+        }).then((res) => {
+          if (res.data.code === 200) {
+            let resData = res.data.data;
+            this.rows = resData.total;
+            this.serveData = resData.data;
+          }
+        })
+      },
+      // 切换栏目
+      changeNav(id) {
+        this.tabId = id;
+        this.currentPage = 1;
+        this.serveType = this.typeArr[id - 1];
+        this.getServeData();
+      }
+    },
+    filters: {
+      formatDateYM: function (value) {
+        let date = new Date(value.replace(/-/g, '/'));
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        return y + '-' + MM;
+      },
+      formatDateD: function (value) {
+        let date = new Date(value.replace(/-/g, '/'));
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return d;
+      }
     }
+  }
 </script>
 <style src="../assets/css/serve.css" scoped></style>
 <style src="../assets/css/news.css" scoped></style>

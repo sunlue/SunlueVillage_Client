@@ -16,10 +16,10 @@
           </li>
           <li class="list-inline-item head-list" :class="{active:show === 3}"><a :href="'/village-resource?vid='+vid">资源</a>
           </li>
-          <li class="list-inline-item head-list" :class="{active:show === 4}"><a
-            :href="'/village-team?vid='+vid">党组</a></li>
           <li class="list-inline-item head-list" :class="{active:show === 5}"><a :href="'/village-message?vid='+vid">动态</a>
           </li>
+          <li class="list-inline-item head-list" :class="{active:show === 4}"><a
+            :href="'/village-team?vid='+vid">党组织</a></li>
         </ul>
         <!--<div class="float-right login-btn">
           <a href="/login">
@@ -36,13 +36,20 @@
         </a>
       </div>
       <div class="mobile-btn" :class="{'close-btn':closeBtn}" @click="closeBtn = !closeBtn"></div>
-      <ul class="mobile-nav clearfix" :class="{'mobile-nav-show':closeBtn}">
-        <li><p><a :href="'/village-home?vid='+vid">村首页</a></p></li>
-        <li><p><a :href="'/village-culture?vid='+vid">概况</a></p></li>
-        <li><p><a :href="'/village-resource?vid='+vid">资源</a></p></li>
-        <li><p><a :href="'/village-team?vid='+vid">党组</a></p></li>
-        <li><p><a :href="'/village-message?vid='+vid">动态</a></p></li>
-      </ul>
+      <div class="mobile-village-nav clearfix" :class="{'mobile-village-nav-show':closeBtn}">
+        <ul class="btn-box float-right">
+          <div class="logo-box">
+            <a href="/">
+              <img src="../../static/images/mobile_logo_v.png" alt="">
+            </a>
+          </div>
+          <li><p><a :href="'/village-home?vid='+vid">村首页</a></p></li>
+          <li><p><a :href="'/village-culture?vid='+vid">概况</a></p></li>
+          <li><p><a :href="'/village-resource?vid='+vid">资源</a></p></li>
+          <li><p><a :href="'/village-message?vid='+vid">动态</a></p></li>
+          <li><p><a :href="'/village-team?vid='+vid">党组织</a></p></li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>

@@ -48,7 +48,7 @@
     </section>
 
     <div class="right-anchor">
-      <p class="list" :class="{'active':showItem==0}" v-show="teamArr.content" @click="goLocation(0)">党支部</p>
+      <p class="list" :class="{'active':showItem==0}" v-show="teamArr.content" @click="goLocation(0)">党组织</p>
       <p class="list" :class="{'active':showItem==1}" v-show="!doubleArr.length<1" @click="goLocation(1)">两新组织</p>
       <p class="list" @click="returnTop">返回顶部</p>
     </div>
@@ -129,7 +129,7 @@
                     }
                 })
             },
-            // 获取党支部
+            // 获取党组织
             getTeamData() {
                 let apiUrl = this.$config.apiUrl + 'village/group/details';
                 axios.get(apiUrl, {

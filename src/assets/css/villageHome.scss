@@ -44,20 +44,20 @@
           object-fit: cover;
         }
 
-        &::after{
+        &::after {
           position: absolute;
           content: '';
           width: 100%;
           height: 100%;
-          background: rgba(0,0,0,0.4);
+          background: rgba(0, 0, 0, 0.4);
           left: 0;
           top: 0;
         }
       }
 
-      &.swiper-slide-thumb-active{
-        .img-box{
-          &::after{
+      &.swiper-slide-thumb-active {
+        .img-box {
+          &::after {
             display: none;
           }
         }
@@ -73,7 +73,7 @@
   width: 80px;
   height: 95px;
 
-  &:hover{
+  &:hover {
     background-color: #37cf9f;
   }
 
@@ -99,7 +99,7 @@
     background: url(../../../static/images/nextBtn.png) center no-repeat;
   }
 
-  &:hover{
+  &:hover {
     background-color: #37cf9f;
   }
 }
@@ -260,7 +260,8 @@
     }
   }
 }
-.panorama-box{
+
+.panorama-box {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -269,7 +270,7 @@
   z-index: 2;
   background: #ccc;
 
-  .panorama-close{
+  .panorama-close {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -279,7 +280,7 @@
     z-index: 4;
     pointer-events: auto;
 
-    &::after{
+    &::after {
       position: absolute;
       content: '';
       width: 100%;
@@ -290,7 +291,7 @@
       top: 15px;
     }
 
-    &::before{
+    &::before {
       position: absolute;
       content: '';
       width: 100%;
@@ -302,16 +303,21 @@
     }
   }
 
-  .tips{
+  .tips {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     font-size: 20px;
   }
 }
 
 @media screen and (max-width: 992px) {
+  .panorama-box {
+    .panorama-close {
+      display: none;
+    }
+  }
   .village-thumbs-box {
     display: none;
   }
@@ -347,6 +353,7 @@
   .content-box {
     width: auto;
     top: 20%;
+    pointer-events: none;
 
     &.content-box-close {
       transform: rotateY(0);
@@ -364,6 +371,7 @@
       height: 255px;
       transition: .5s;
       background: #fff;
+      pointer-events: auto;
 
       .name {
         font-size: 26px;
@@ -398,6 +406,7 @@
       height: auto;
       position: relative;
       z-index: 2;
+      pointer-events: auto;
 
       .icon-list {
         height: 85px;

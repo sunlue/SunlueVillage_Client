@@ -210,14 +210,12 @@
         methods: {
             // 点赞
             setLike: function (data, uniqid) {
-                console.log(uniqid)
                 for (let i = 0; i < data.length; i++) {
                     if (uniqid === data[i].uniqid) {
                         if (!data[i].isLike) {
                             axios.put(this.$config.apiUrl + "village/data/like", {
                                 uniqid: uniqid
                             }).then(res => {
-                                console.log(res)
                                 if (res.data.code === 200) {
                                     data[i].like = parseInt(data[i].like) + 1;
                                     data[i].isLike = true
@@ -407,7 +405,7 @@
         },
         filters: {
             formatDateYMD: function (value) {
-                let date = new Date(value);
+                let date = new Date(value.replace(/-/g,'/'));
                 let y = date.getFullYear();
                 let MM = date.getMonth() + 1;
                 MM = MM < 10 ? ('0' + MM) : MM;

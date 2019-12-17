@@ -148,7 +148,6 @@
                 }).then((res)=>{
                     if (res.data.code === 200) {
                         this.banner = res.data.data;
-                        console.log(this.banner)
                     }
                 })
             },
@@ -160,7 +159,6 @@
                             axios.put(this.$config.apiUrl + "village/data/like", {
                                 uniqid: uniqid
                             }).then(res => {
-                                console.log(res)
                                 if (res.data.code === 200) {
                                     data[i].like = parseInt(data[i].like) + 1;
                                     data[i].isLike = true

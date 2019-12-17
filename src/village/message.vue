@@ -110,14 +110,14 @@
     },
     filters: {
       formatDateYM: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let y = date.getFullYear();
         let MM = date.getMonth() + 1;
         MM = MM < 10 ? ('0' + MM) : MM;
         return y + '-' + MM;
       },
       formatDateD: function (value) {
-        let date = new Date(value);
+        let date = new Date(value.replace(/-/g, '/'));
         let d = date.getDate();
         d = d < 10 ? ('0' + d) : d;
         return d;

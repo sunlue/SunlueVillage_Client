@@ -42,7 +42,7 @@
     </section>
 
     <section class="information-news-box">
-<!--      <p class="news-title"><img src="../../static/images/informationTitle.png" alt=""></p>-->
+      <!--      <p class="news-title"><img src="../../static/images/informationTitle.png" alt=""></p>-->
 
       <div class="container">
         <div class="row flex-row-reverse">
@@ -83,7 +83,7 @@
           </div>
         </div>
 
-<!--        <p class="news-title action-title"><img src="../../static/images/activity.png" alt=""></p>-->
+        <!--        <p class="news-title action-title"><img src="../../static/images/activity.png" alt=""></p>-->
         <div class="row home-infomation">
           <div class="col-lg-4 col-sm-6 home-infomation-list" v-for="(list,index) in infomationList">
             <div class="img-box">
@@ -100,216 +100,216 @@
   </div>
 </template>
 <script>
-    import publicHead from "../components/publicHead"
-    import publicFooter from "../components/publicFooter"
-    import axios from "axios"
-    import Swiper from "swiper"
-    import "swiper/css/swiper.min.css"
+  import publicHead from "../components/publicHead"
+  import publicFooter from "../components/publicFooter"
+  import axios from "axios"
+  import Swiper from "swiper"
+  import "swiper/css/swiper.min.css"
 
-    export default {
-        components: {
-            publicHead,
-            publicFooter
-        },
-        data() {
-            return {
-                show: 3,
-                navType:"NAV-5DDA3A6972B8E",
-                newsType:"ARTICLE-TYPE-5DD3A76B30129",
-                informationType:"ARTICLE-TYPE-5D1C482F4320B",
-                banner: [],
-                newsList: [],
-                newsTopList: [],
-                newsRecommendedList: [],
-                activeNews: [],
-                topNews: [],
-                infomationList: []
+  export default {
+    components: {
+      publicHead,
+      publicFooter
+    },
+    data() {
+      return {
+        show: 3,
+        navType: "NAV-5DDA3A6972B8E",
+        newsType: "ARTICLE-TYPE-5DD3A76B30129",
+        informationType: "ARTICLE-TYPE-5D1C482F4320B",
+        banner: [],
+        newsList: [],
+        newsTopList: [],
+        newsRecommendedList: [],
+        activeNews: [],
+        topNews: [],
+        infomationList: []
+      }
+    },
+    mounted() {
+      this.getBanner();
+      // this.initNewsSwiper();
+      // this.getTopNews();
+      this.getNews();
+      this.getTopNews();
+      this.getRecommendedNews();
+      this.getInformation();
+    },
+    methods: {
+      // 获取banner
+      getBanner() {
+        // axios.get("../../static/data/informationBanner.json", {}).then((res) => {
+        //     this.banner = res.data;
+        //     this.$nextTick(() => {
+        //         this.initBannerSwiper()
+        //     })
+        // })
+        let apiUrl = this.$config.apiUrl + 'portal/slide/read';
+        axios.get(apiUrl, {
+          params: {
+            nav: this.navType
+          }
+        }).then((res) => {
+          if (res.data.code === 200) {
+            this.banner = res.data.data;
+            this.$nextTick(() => {
+              this.initBannerSwiper()
+            });
+          }
+        })
+      },
+      // 获取新闻列表
+      getNews: function () {
+        // axios.get('../../static/data/homeNews.json').then((res) => {
+        //     this.newsList = res.data
+        //     this.activeNews = res.data[0].name
+        // })
+        let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+        axios.get(apiUrl, {
+          params: {
+            type: this.newsType,
+            page: 1,
+            limit: 7,
+            hot: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === 200) {
+            this.newsList = res.data.data.data;
+          }
+        })
+      },
+      // 获取置顶新闻列表
+      getTopNews: function () {
+        let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+        axios.get(apiUrl, {
+          params: {
+            type: this.newsType,
+            page: 1,
+            limit: 1,
+            is_top: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === 200) {
+            this.newsTopList = res.data.data.data;
+          }
+        })
+      },
+      // 获取新闻轮播图
+      getRecommendedNews: function () {
+        let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+        axios.get(apiUrl, {
+          params: {
+            type: this.newsType,
+            page: 1,
+            limit: 5,
+            recommended: 1,
+          }
+        }).then((res) => {
+          if (res.data.code === 200) {
+            this.newsRecommendedList = res.data.data.data;
+            this.$nextTick(() => {
+              this.initNewsSwiper();
+            })
+          }
+        })
+      },
+
+
+      // 获取活动
+      getInformation: function () {
+        // let self = this
+        // axios.get('../../static/data/homezixun.json').then(function (res) {
+        //     self.infomationList = res.data
+        // })
+
+        let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
+        axios.get(apiUrl, {
+          params: {
+            type: this.informationType,
+            page: 1,
+            limit: 6,
+            recommended: 1
+          }
+        }).then(res => {
+          if (res.data.code === 200) {
+            this.infomationList = res.data.data.data;
+          }
+        })
+      },
+      // 初始化顶部swiper
+      initBannerSwiper() {
+        new Swiper('.information-banner', {
+          autoplay: {
+            delay: 4000,
+            stopOnLastSlide: false,
+            disableOnInteraction: false,
+          },
+          observer: true,
+          observeParents: true,
+          speed: 800,
+          spaceBetween: 0,
+          centeredSlides: true,
+          slidesPerView: 1,
+          watchSlidesProgress: true,
+          initialSlide: 1,
+          loop: true,
+          pagination: {
+            el: '.information-pagination',
+            clickable: true
+          },
+          on: {
+            setTranslate: function () {
+              let slides = this.slides
+              for (let i = 0; i < slides.length; i++) {
+                let slide = slides.eq(i)
+                let progress = slides[i].progress
+                slide.transform('scale(' + (1 - Math.abs(progress) / 8) + ')');
+              }
+            },
+            setTransition: function (transition) {
+              for (let i = 0; i < this.slides.length; i++) {
+                let slide = this.slides.eq(i)
+                slide.transition(transition);
+              }
+            },
+          }
+        })
+      },
+      // 初始化新闻动态swiper
+      initNewsSwiper() {
+        let self = this;
+        new Swiper('#newsSwiper', {
+          autoplay: {
+            delay: 3000,
+            stopOnLastSlide: false,
+            disableOnInteraction: true,
+          },
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true
+          },
+          observer: true,
+          on: {
+            slideChange: function () {
+              let index = this.realIndex;
+              self.activeNews = self.newsRecommendedList[index].title;
             }
-        },
-        mounted() {
-            this.getBanner();
-            // this.initNewsSwiper();
-            // this.getTopNews();
-            this.getNews();
-            this.getTopNews();
-            this.getRecommendedNews();
-            this.getInformation();
-        },
-        methods: {
-            // 获取banner
-            getBanner() {
-                // axios.get("../../static/data/informationBanner.json", {}).then((res) => {
-                //     this.banner = res.data;
-                //     this.$nextTick(() => {
-                //         this.initBannerSwiper()
-                //     })
-                // })
-                let apiUrl = this.$config.apiUrl + 'portal/slide/read';
-                axios.get(apiUrl, {
-                    params: {
-                        nav: this.navType
-                    }
-                }).then((res)=>{
-                    if (res.data.code === 200) {
-                        this.banner = res.data.data;
-                        this.$nextTick(() => {
-                            this.initBannerSwiper()
-                        });
-                    }
-                })
-            },
-            // 获取新闻列表
-            getNews: function () {
-                // axios.get('../../static/data/homeNews.json').then((res) => {
-                //     this.newsList = res.data
-                //     this.activeNews = res.data[0].name
-                // })
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
-                axios.get(apiUrl, {
-                    params: {
-                        type: this.newsType,
-                        page: 1,
-                        limit: 7,
-                        hot:1,
-                    }
-                }).then((res)=>{
-                    if (res.data.code === 200) {
-                        this.newsList = res.data.data.data;
-                    }
-                })
-            },
-            // 获取置顶新闻列表
-            getTopNews: function () {
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
-                axios.get(apiUrl, {
-                    params: {
-                        type: this.newsType,
-                        page: 1,
-                        limit: 1,
-                        is_top:1,
-                    }
-                }).then((res) => {
-                    if (res.data.code === 200) {
-                        this.newsTopList = res.data.data.data;
-                    }
-                })
-            },
-            // 获取新闻轮播图
-            getRecommendedNews: function () {
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
-                axios.get(apiUrl, {
-                    params: {
-                        type: this.newsType,
-                        page: 1,
-                        limit: 5,
-                        recommended:1,
-                    }
-                }).then((res) => {
-                    if (res.data.code === 200) {
-                        this.newsRecommendedList = res.data.data.data;
-                        this.$nextTick(() => {
-                            this.initNewsSwiper();
-                        })
-                    }
-                })
-            },
-
-
-            // 获取活动
-            getInformation: function () {
-                // let self = this
-                // axios.get('../../static/data/homezixun.json').then(function (res) {
-                //     self.infomationList = res.data
-                // })
-
-                let apiUrl = this.$config.apiUrl + 'portal/article/data/read';
-                axios.get(apiUrl, {
-                    params: {
-                        type: this.informationType,
-                        page: 1,
-                        limit: 6,
-                        recommended:1
-                    }
-                }).then(res=> {
-                    if (res.data.code === 200) {
-                        this.infomationList = res.data.data.data;
-                    }
-                })
-            },
-            // 初始化顶部swiper
-            initBannerSwiper() {
-                new Swiper('.information-banner', {
-                    autoplay: {
-                        delay: 4000,
-                        stopOnLastSlide: false,
-                        disableOnInteraction: false,
-                    },
-                    observer: true,
-                    observeParents: true,
-                    speed: 800,
-                    spaceBetween: 0,
-                    centeredSlides: true,
-                    slidesPerView: 1,
-                    watchSlidesProgress: true,
-                    initialSlide: 1,
-                    loop: true,
-                    pagination: {
-                        el: '.information-pagination',
-                        clickable: true
-                    },
-                    on: {
-                        setTranslate: function () {
-                            let slides = this.slides
-                            for (let i = 0; i < slides.length; i++) {
-                                let slide = slides.eq(i)
-                                let progress = slides[i].progress
-                                slide.transform('scale(' + (1 - Math.abs(progress) / 8) + ')');
-                            }
-                        },
-                        setTransition: function (transition) {
-                            for (let i = 0; i < this.slides.length; i++) {
-                                let slide = this.slides.eq(i)
-                                slide.transition(transition);
-                            }
-                        },
-                    }
-                })
-            },
-            // 初始化新闻动态swiper
-            initNewsSwiper() {
-                let self = this;
-                new Swiper('#newsSwiper', {
-                    autoplay: {
-                        delay: 3000,
-                        stopOnLastSlide: false,
-                        disableOnInteraction: true,
-                    },
-                    pagination: {
-                        el: '.swiper-pagination',
-                        clickable: true
-                    },
-                    observer: true,
-                    on: {
-                        slideChange: function () {
-                            let index = this.realIndex;
-                            self.activeNews = self.newsRecommendedList[index].title;
-                        }
-                    },
-                })
-            }
-        },
-        filters: {
-            formatDateYMD: function (value) {
-                let date = new Date(value);
-                let y = date.getFullYear();
-                let MM = date.getMonth() + 1;
-                MM = MM < 10 ? ('0' + MM) : MM;
-                let d = date.getDate();
-                d = d < 10 ? ('0' + d) : d;
-                return y + '-' + MM + '-' + d;
-            }
-        }
+          },
+        })
+      }
+    },
+    filters: {
+      formatDateYMD: function (value) {
+        let date = new Date(value.replace(/-/g, '/'));
+        let y = date.getFullYear();
+        let MM = date.getMonth() + 1;
+        MM = MM < 10 ? ('0' + MM) : MM;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return y + '-' + MM + '-' + d;
+      }
     }
+  }
 </script>
 
 <style src="../assets/css/infomationHome.css" scoped>

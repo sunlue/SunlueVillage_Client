@@ -3,6 +3,7 @@ html, body {
   font-size: 16px;
   max-width: 1920px;
   margin: auto;
+  background-color: #f1f1f1;
 }
 
 @keyframes star {
@@ -549,7 +550,11 @@ footer {
 .mobile-nav-box {
   display: none;
 }
-
+@media screen and (max-width: 1520px) {
+  .head-box{
+    padding: 0 10px;
+  }
+}
 @media screen and (max-width: 992px) {
   html, body {
     font-size: 14px;
@@ -568,7 +573,7 @@ footer {
     }
 
     .mobile-log {
-      max-width: 45px;
+      max-width: 100px;
       top: 15px;
       left: 20px;
       position: absolute;
@@ -625,6 +630,57 @@ footer {
       }
     }
   }
+
+  .mobile-village-nav {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0);
+
+    &.mobile-village-nav-show{
+      background-color: rgba(0, 0, 0, 0.32);
+      pointer-events: auto;
+
+      .btn-box{
+        transform: translateX(0);
+      }
+    }
+
+    .btn-box {
+      width: 40%;
+      height: 100%;
+      background-color: #fff;
+      pointer-events: auto;
+      padding: 80px 0;
+      transform: translateX(100%);
+      transition:transform .4s;
+
+      .logo-box {
+        text-align: center;
+        margin-bottom: 55px;
+      }
+
+      li {
+        list-style: none;
+
+        p {
+          text-align: center;
+          margin: 0;
+          line-height: 55px;
+
+          a {
+            display: block;
+            font-size: 18px;
+            color: $mainColor;
+
+            &:hover{
+              color: #fff;
+              background-color: $mainColor;
+            }
+          }
+        }
+      }
+    }
+  }
   .head-box {
     display: none;
   }
@@ -645,21 +701,45 @@ footer {
     width: 100vw;
     height: 100vh;
     z-index: 3;
-    background: #000;
-    padding: 120px 15px;
+    background: #fff;
+    padding: 20vh 15px;
     transition: .5s;
     opacity: 0;
 
     li {
       list-style: none;
       width: 50%;
-      padding: 10px;
+      padding: 20px 10px;
       float: left;
+      border: 1px solid rgb(241, 241, 241);
+
+      &:nth-child(n+1) {
+        margin-right: -1px;
+        margin-top: -1px;
+      }
+
+      @for $i from 1 through 6 {
+        &:nth-child(#{$i}) {
+          .icon {
+            background-image: url(../../../static/images/mobileBtn#{$i}.png);
+          }
+        }
+      }
 
       p {
         margin: 0;
-        padding: 5px 0;
-        border-bottom: 1px solid #999;
+      }
+
+      .icon {
+        width: 100%;
+        height: 72px;
+        background-position: center;
+        background-repeat: no-repeat;
+      }
+
+      .text {
+        text-align: center;
+        color: #666;
       }
 
       a {

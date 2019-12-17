@@ -54,7 +54,7 @@
           <p class="icon-list" :class="{'audio-play':audioPlay}" @click="playAudio">
             <i class="icon village-icon"></i>
             <span class="text">解说</span>
-            <audio class="village-audio" :src="$config.apiUrl + villageArr.audio"></audio>
+            <audio class="village-audio" :src="villageArr.audio?($config.apiUrl + villageArr.audio):'../../static/audio/1.mp3'"></audio>
           </p>
         </div>
         <div class="details-box">
