@@ -14,7 +14,7 @@
           <li class="list-inline-item head-list" :class="{active:show === 3||show === 31}"><a href="/information-home">资讯</a>
           </li>
           <li class="list-inline-item head-list" :class="{active:show === 4}"><a href="/serve">服务</a></li>
-          <li class="list-inline-item head-list" :class="{active:show === 5}"><a href="javascript:void(0)">电商</a></li>
+          <li class="list-inline-item head-list" :class="{active:show === 5}"><a href="http://cm.sunlue.com/" target="_blank">村淘</a></li>
         </ul>
         <!--<div class="float-right login-btn">
           <a href="/login">
